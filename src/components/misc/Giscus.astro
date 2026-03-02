@@ -1,0 +1,134 @@
+---
+import { giscusConfig } from "@/config";
+import I18nKey from "@i18n/i18nKey";
+import { i18n } from "@i18n/translation";
+
+interface Props {
+	class?: string;
+}
+
+const className = Astro.props.class || "";
+---
+
+<section class:list={["card-base rounded-xl px-6 py-5", className]}>
+	<div class="mb-4 text-lg font-semibold text-black/85 dark:text-white/85">
+		{i18n(I18nKey.comments)}
+	</div>
+	<div data-giscus-root></div>
+</section>
+
+<script
+	is:inline
+	define:vars={{
+		repo: giscusConfig.repo,
+		repoId: giscusConfig.repoId,
+		category: giscusConfig.category,
+		categoryId: giscusConfig.categoryId,
+		mapping: giscusConfig.mapping,
+		strict: giscusConfig.strict,
+		reactionsEnabled: giscusConfig.reactionsEnabled,
+		emitMetadata: giscusConfig.emitMetadata,
+		inputPosition: giscusConfig.inputPosition,
+		lang: giscusConfig.lang,
+		loading: giscusConfig.lazyLoading ? "lazy" : "eager",
+		lightTheme: giscusConfig.lightTheme,
+		darkTheme: giscusConfig.darkTheme,
+	}}
+>
+	const GISCUS_ORIGIN = "https://giscus.app";
+	const GISCUS_ROOT_SELECTOR = "[data-giscus-root]";
+
+	// 根据站点当前的 dark 类，计算 giscus 应使用的主题。
+	function getCurrentTheme() {
+		return document.documentElement.classList.contains("dark")
+			? darkTheme
+			: lightTheme;
+	}
+
+	// 不重建 giscus 的前提下，通过 postMessage 同步主题到 iframe。
+	function syncGiscusTheme() {
+		const iframe = document.querySelector("iframe.giscus-frame");
+		if (!iframe || !iframe.contentWindow) {
+			return;
+		}
+
+		iframe.contentWindow.postMessage(
+			{
+				giscus: {
+					setConfig: {
+						theme: getCurrentTheme(),
+					},
+				},
+			},
+			GISCUS_ORIGIN,
+		);
+	}
+
+	// 每次页面视图只挂载一次 giscus；若已存在则仅同步主题。
+	function mountGiscus() {
+		const root = document.querySelector(GISCUS_ROOT_SELECTOR);
+		if (!root) {
+			return;
+		}
+
+		if (root.querySelector("iframe.giscus-frame")) {
+			syncGiscusTheme();
+			return;
+		}
+
+		const script = document.createElement("script");
+		script.src = `${GISCUS_ORIGIN}/client.js`;
+		script.async = true;
+		script.crossOrigin = "anonymous";
+
+		script.setAttribute("data-repo", repo);
+		script.setAttribute("data-repo-id", repoId);
+		script.setAttribute("data-category", category);
+		script.setAttribute("data-category-id", categoryId);
+		script.setAttribute("data-mapping", mapping);
+		script.setAttribute("data-strict", strict);
+		script.setAttribute("data-reactions-enabled", reactionsEnabled);
+		script.setAttribute("data-emit-metadata", emitMetadata);
+		script.setAttribute("data-input-position", inputPosition);
+		script.setAttribute("data-theme", getCurrentTheme());
+		script.setAttribute("data-lang", lang);
+		script.setAttribute("data-loading", loading);
+
+		root.replaceChildren(script);
+		window.setTimeout(syncGiscusTheme, 300);
+	}
+
+	// 监听 html 的 class 变化，让主题切换时实时更新 giscus。
+	function installThemeWatcher() {
+		if (window.__giscusThemeObserverInstalled) {
+			return;
+		}
+
+		const observer = new MutationObserver(() => {
+			syncGiscusTheme();
+		});
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["class"],
+		});
+
+		window.__giscusThemeObserverInstalled = true;
+	}
+
+	mountGiscus();
+	installThemeWatcher();
+
+	// swup 切页后重新执行挂载与主题同步。
+	const setup = () => {
+		window.swup.hooks.on("page:view", () => {
+			mountGiscus();
+			syncGiscusTheme();
+		});
+	};
+
+	if (window.swup?.hooks) {
+		setup();
+	} else {
+		document.addEventListener("swup:enable", setup, { once: true });
+	}
+</script>

@@ -77,6 +77,23 @@ export type LicenseConfig = {
 	url: string;
 };
 
+export type GiscusConfig = {
+	enable: boolean;
+	repo: string;
+	repoId: string;
+	category: string;
+	categoryId: string;
+	mapping: string;
+	strict: "0" | "1";
+	reactionsEnabled: "0" | "1";
+	emitMetadata: "0" | "1";
+	inputPosition: "top" | "bottom";
+	lang: string;
+	lazyLoading: boolean;
+	lightTheme: string;
+	darkTheme: string;
+};
+
 export type LIGHT_DARK_MODE =
 	| typeof LIGHT_MODE
 	| typeof DARK_MODE

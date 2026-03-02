@@ -1,5 +1,6 @@
 import type {
 	ExpressiveCodeConfig,
+	GiscusConfig,
 	LicenseConfig,
 	NavBarConfig,
 	ProfileConfig,
@@ -76,6 +77,23 @@ export const licenseConfig: LicenseConfig = {
 	enable: true,
 	name: "CC BY-NC-SA 4.0",
 	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+};
+
+export const giscusConfig: GiscusConfig = {
+	enable: true,
+	repo: "Tomwucpu/Temperature-blog-comment",
+	repoId: "R_kgDORcFL9A",
+	category: "Announcements",
+	categoryId: "DIC_kwDORcFL9M4C3fwY",
+	mapping: "pathname",
+	strict: "0",
+	reactionsEnabled: "1",
+	emitMetadata: "0",
+	inputPosition: "top",
+	lang: "zh-CN",
+	lazyLoading: true,
+	lightTheme: "light",
+	darkTheme: "dark",
 };
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {
