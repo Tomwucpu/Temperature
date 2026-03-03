@@ -9,18 +9,12 @@ interface Props {
 
 const { class: className, style } = Astro.props;
 
-const UMAMI_CONFIG = {
-    baseUrl: 'https://cloud.umami.is/analytics/us/api',
-    websiteId: '8cb717a8-418f-4347-bea6-0eda398b8d65',
-    shareToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZUlkIjoiZWEyOTAxN2YtMDRhOS00OWUyLThlZTMtN2YwMjg1Y2U5ZDNjIiwid2Vic2l0ZUlkIjoiOGNiNzE3YTgtNDE4Zi00MzQ3LWJlYTYtMGVkYTM5OGI4ZDY1IiwicGFyYW1ldGVycyI6eyJ1dG0iOmZhbHNlLCJnb2FscyI6ZmFsc2UsImV2ZW50cyI6dHJ1ZSwiY29tcGFyZSI6ZmFsc2UsImZ1bm5lbHMiOmZhbHNlLCJyZXZlbnVlIjpmYWxzZSwiam91cm5leXMiOmZhbHNlLCJvdmVydmlldyI6dHJ1ZSwicmVhbHRpbWUiOmZhbHNlLCJzZXNzaW9ucyI6ZmFsc2UsImJyZWFrZG93biI6ZmFsc2UsInJldGVudGlvbiI6ZmFsc2UsImF0dHJpYnV0aW9uIjpmYWxzZX0sImlhdCI6MTc3MjQzMjQ4M30.vk0LWi_7J5f2QJYxn1Yho3GtaD7k4gbtclchNWe21xc'
-};
+// 【注意事项】：上线前请把下方 URL 替换为您部署好的 Cloudflare Worker 域名
+// 例如: https://umami-proxy.your-username.workers.dev
+const PROXY_URL = 'https://little-star-3a5e.1367052657.workers.dev';
 
-// 强制转换时间戳格式为毫秒
-const endAt = Date.now();
-const startAt = 0; // 这里 0 表示从建站以来所有时间。如果是最近 24 小时：Date.now() - 24 * 60 * 60 * 1000
-
-// 构造获取统计数据的 API 链接
-const apiUrl = `${UMAMI_CONFIG.baseUrl}/websites/${UMAMI_CONFIG.websiteId}/stats?startAt=${startAt}&endAt=${endAt}`;
+// 注意：API的查询时间戳（startAt/endAt）已移至客户端 <script> 中计算，
+// 以免 Astro 静态部署时该页面被缓存，导致永远获取旧时间的统计数据。
 ---
 
 <WidgetLayout name="访问统计" id="umami-stats" isCollapsed={false} class={className} style={style}>
@@ -49,12 +43,15 @@ const apiUrl = `${UMAMI_CONFIG.baseUrl}/websites/${UMAMI_CONFIG.websiteId}/stats
     </div>
 </WidgetLayout>
 
-<script define:vars={{ apiUrl,UMAMI_CONFIG }}>
-    // 客户端获取动态 Umami 数据的脚本
+<script define:vars={{ PROXY_URL }}>
+  
+    const endAt = Date.now();
+    const startAt = 0;
+    const apiUrl = `${PROXY_URL}/?startAt=${startAt}&endAt=${endAt}`;
+
     fetch(apiUrl, {
         method: 'GET',
         headers: {
-            'x-umami-share-token': UMAMI_CONFIG.shareToken,       // 必须携带的授权 token
             'Content-Type': 'application/json'
         }
     })
@@ -71,7 +68,7 @@ const apiUrl = `${UMAMI_CONFIG.baseUrl}/websites/${UMAMI_CONFIG.websiteId}/stats
             const visits = data.visits || 0;
             const visitors = data.visitors || 0;
             
-            // 格式化数字 (如: 1,234)
+            // 格式化数字
             const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num);
             
             // 更新 DOM
