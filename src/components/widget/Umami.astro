@@ -1,0 +1,96 @@
+---
+import WidgetLayout from './WidgetLayout.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	class?: string;
+	style?: string;
+}
+
+const { class: className, style } = Astro.props;
+
+const UMAMI_CONFIG = {
+    baseUrl: 'https://cloud.umami.is/analytics/us/api',
+    websiteId: '8cb717a8-418f-4347-bea6-0eda398b8d65',
+    shareToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaGFyZUlkIjoiZWEyOTAxN2YtMDRhOS00OWUyLThlZTMtN2YwMjg1Y2U5ZDNjIiwid2Vic2l0ZUlkIjoiOGNiNzE3YTgtNDE4Zi00MzQ3LWJlYTYtMGVkYTM5OGI4ZDY1IiwicGFyYW1ldGVycyI6eyJ1dG0iOmZhbHNlLCJnb2FscyI6ZmFsc2UsImV2ZW50cyI6dHJ1ZSwiY29tcGFyZSI6ZmFsc2UsImZ1bm5lbHMiOmZhbHNlLCJyZXZlbnVlIjpmYWxzZSwiam91cm5leXMiOmZhbHNlLCJvdmVydmlldyI6dHJ1ZSwicmVhbHRpbWUiOmZhbHNlLCJzZXNzaW9ucyI6ZmFsc2UsImJyZWFrZG93biI6ZmFsc2UsInJldGVudGlvbiI6ZmFsc2UsImF0dHJpYnV0aW9uIjpmYWxzZX0sImlhdCI6MTc3MjQzMjQ4M30.vk0LWi_7J5f2QJYxn1Yho3GtaD7k4gbtclchNWe21xc'
+};
+
+// 强制转换时间戳格式为毫秒
+const endAt = Date.now();
+const startAt = 0; // 这里 0 表示从建站以来所有时间。如果是最近 24 小时：Date.now() - 24 * 60 * 60 * 1000
+
+// 构造获取统计数据的 API 链接
+const apiUrl = `${UMAMI_CONFIG.baseUrl}/websites/${UMAMI_CONFIG.websiteId}/stats?startAt=${startAt}&endAt=${endAt}`;
+---
+
+<WidgetLayout name="访问统计" id="umami-stats" isCollapsed={false} class={className} style={style}>
+    <div class="flex flex-col gap-2 pb-2">
+        <div class="flex justify-between items-center text-sm text-neutral-500 dark:text-neutral-400">
+            <div class="flex items-center gap-2">
+                <Icon name="material-symbols:visibility-outline-rounded" class="text-lg" />
+                <span>浏览量</span>
+            </div>
+            <span id="umami-pageviews" class="font-bold text-neutral-700 dark:text-neutral-300">...</span>
+        </div>
+        <div class="flex justify-between items-center text-sm text-neutral-500 dark:text-neutral-400">
+            <div class="flex items-center gap-2">
+                <Icon name="material-symbols:touch-app-outline-rounded" class="text-lg" />
+                <span>访问数</span>
+            </div>
+            <span id="umami-visits" class="font-bold text-neutral-700 dark:text-neutral-300">...</span>
+        </div>
+        <div class="flex justify-between items-center text-sm text-neutral-500 dark:text-neutral-400">
+            <div class="flex items-center gap-2">
+                <Icon name="material-symbols:person-outline-rounded" class="text-lg" />
+                <span>访客数</span>
+            </div>
+            <span id="umami-visitors" class="font-bold text-neutral-700 dark:text-neutral-300">...</span>
+        </div>
+    </div>
+</WidgetLayout>
+
+<script define:vars={{ apiUrl,UMAMI_CONFIG }}>
+    // 客户端获取动态 Umami 数据的脚本
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'x-umami-share-token': UMAMI_CONFIG.shareToken,       // 必须携带的授权 token
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('API 返回错误状态: ' + res.status);
+        }
+        return res.json();
+    })
+    .then(data => {
+        if (data) {
+            // 解析数据
+            const pageviews = data.pageviews || 0;
+            const visits = data.visits || 0;
+            const visitors = data.visitors || 0;
+            
+            // 格式化数字 (如: 1,234)
+            const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num);
+            
+            // 更新 DOM
+            const elPageviews = document.getElementById('umami-pageviews');
+            if (elPageviews) elPageviews.innerText = formatNumber(pageviews);
+
+            const elVisits = document.getElementById('umami-visits');
+            if (elVisits) elVisits.innerText = formatNumber(visits);
+            
+            const elVisitors = document.getElementById('umami-visitors');
+            if (elVisitors) elVisitors.innerText = formatNumber(visitors);
+        }
+    })
+    .catch(err => {
+        console.error('获取 Umami 统计数据失败:', err);
+        const elPageviews = document.getElementById('umami-pageviews');
+        if (elPageviews) elPageviews.innerText = '获取失败';
+        
+        const elVisitors = document.getElementById('umami-visitors');
+        if (elVisitors) elVisitors.innerText = '获取失败';
+    });
+</script>
