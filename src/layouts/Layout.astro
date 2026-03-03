@@ -148,7 +148,7 @@ const bannerOffset =
 		<link rel="alternate" type="application/rss+xml" title={profileConfig.name} href={`${Astro.site}rss.xml`}/>
 
 		<!-- Umami 分析脚本 -->
-		<script defer src="https://cloud.umami.is/script.js" data-website-id="8cb717a8-418f-4347-bea6-0eda398b8d65"></script>
+		<script defer src="https://cloud.umami.is/script.js" data-website-id="8cb717a8-418f-4347-bea6-0eda398b8d65" data-auto-track="false"></script>
 	</head>
 	<body class=" min-h-screen transition " class:list={[{"lg:is-home": isHomePage, "enable-banner": enableBanner}]}
 		  data-overlayscrollbars-initialize
@@ -434,6 +434,11 @@ const setup = () => {
 		if (heightExtend) {
 			heightExtend.classList.remove('hidden')
 		}
+        
+        // 当 Swup 完成页面替换并准备显示新页面时，手动触发一条 Umami 数据
+        if ((window as any).umami) {
+            (window as any).umami.track();
+        }
 	});
 	window.swup.hooks.on('visit:end', (_visit: {to: {url: string}}) => {
 		setTimeout(() => {
@@ -455,6 +460,18 @@ if (window?.swup?.hooks) {
 } else {
 	document.addEventListener('swup:enable', setup)
 }
+
+// 首次打开网页时，手动触发一次追踪（兼容异步加载延迟）
+let umamiCheckCount = 0;
+const trackInitialPageview = () => {
+    if ((window as any).umami) {
+        (window as any).umami.track();
+    } else if (umamiCheckCount < 30) {
+        umamiCheckCount++;
+        setTimeout(trackInitialPageview, 300);
+    }
+};
+trackInitialPageview();
 
 let backToTopBtn = document.getElementById('back-to-top-btn');
 let toc = document.getElementById('toc-wrapper');
