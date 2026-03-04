@@ -12,9 +12,6 @@ const { class: className, style } = Astro.props;
 // 【注意事项】：上线前请把下方 URL 替换为您部署好的 Cloudflare Worker 域名
 // 例如: https://umami-proxy.your-username.workers.dev
 const PROXY_URL = 'https://little-star-3a5e.1367052657.workers.dev';
-
-// 注意：API的查询时间戳（startAt/endAt）已移至客户端 <script> 中计算，
-// 以免 Astro 静态部署时该页面被缓存，导致永远获取旧时间的统计数据。
 ---
 
 <WidgetLayout name="访问统计" id="umami-stats" isCollapsed={false} class={className} style={style}>

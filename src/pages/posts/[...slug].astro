@@ -12,6 +12,7 @@ import { Icon } from "astro-icon/components";
 import { giscusConfig, licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
+import UmamiArticleStats from "../../components/UmamiArticleStats.astro";
 import { profileConfig, siteConfig } from "../../config";
 import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 
@@ -68,6 +69,22 @@ const jsonLd = {
                         {remarkPluginFrontmatter.minutes} {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
                     </div>
                 </div>
+
+                <!-- 通过封装好的文章统计组件展示每篇文章的浏览量和访问次数 -->
+                <UmamiArticleStats url={getPostUrlBySlug(entry.slug)}>
+                    <div class="flex flex-row items-center">
+                        <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+                            <Icon name="material-symbols:visibility-outline-rounded"></Icon>
+                        </div>
+                        <div class="text-sm"><span class="umami-views">...</span> 浏览量</div>
+                    </div>
+                    <div class="flex flex-row items-center">
+                        <div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+                            <Icon name="material-symbols:touch-app-outline-rounded"></Icon>
+                        </div>
+                        <div class="text-sm"><span class="umami-visits">...</span> 访问次数</div>
+                    </div>
+                </UmamiArticleStats>
             </div>
 
             <!-- title -->
