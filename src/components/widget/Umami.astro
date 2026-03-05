@@ -9,9 +9,7 @@ interface Props {
 
 const { class: className, style } = Astro.props;
 
-// 【注意事项】：上线前请把下方 URL 替换为您部署好的 Cloudflare Worker 域名
-// 例如: https://umami-proxy.your-username.workers.dev
-const PROXY_URL = 'https://little-star-3a5e.1367052657.workers.dev';
+const PROXY_URL = 'https://umami.temperaturetw.top';
 ---
 
 <WidgetLayout name="访问统计" id="umami-stats" isCollapsed={false} class={className} style={style}>
@@ -40,13 +38,12 @@ const PROXY_URL = 'https://little-star-3a5e.1367052657.workers.dev';
     </div>
 </WidgetLayout>
 
-<script define:vars={{ PROXY_URL }}>
-  
-    const endAt = Date.now();
-    const startAt = 0;
-    const apiUrl = `${PROXY_URL}/?startAt=${startAt}&endAt=${endAt}`;
+<script>
+    import { animateValue } from '@utils/animation-utils';
 
-    fetch(apiUrl, {
+    const PROXY_URL = 'https://umami.temperaturetw.top';
+
+    fetch(PROXY_URL, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -64,19 +61,16 @@ const PROXY_URL = 'https://little-star-3a5e.1367052657.workers.dev';
             const pageviews = data.pageviews || 0;
             const visits = data.visits || 0;
             const visitors = data.visitors || 0;
-            
-            // 格式化数字
-            const formatNumber = (num) => new Intl.NumberFormat('en-US').format(num);
-            
-            // 更新 DOM
+
+            // 更新 DOM 并使用动画平滑显示数字
             const elPageviews = document.getElementById('umami-pageviews');
-            if (elPageviews) elPageviews.innerText = formatNumber(pageviews);
+            if (elPageviews) animateValue(elPageviews, pageviews);
 
             const elVisits = document.getElementById('umami-visits');
-            if (elVisits) elVisits.innerText = formatNumber(visits);
+            if (elVisits) animateValue(elVisits, visits);
             
             const elVisitors = document.getElementById('umami-visitors');
-            if (elVisitors) elVisitors.innerText = formatNumber(visitors);
+            if (elVisitors) animateValue(elVisitors, visitors);
         }
     })
     .catch(err => {

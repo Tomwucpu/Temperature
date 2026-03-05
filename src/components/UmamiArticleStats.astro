@@ -4,21 +4,19 @@ interface Props {
 }
 const { url } = Astro.props;
 
-// 【注意事项】: 使用提供的 Umami 分享凭证
-const WEBSITE_ID = "8cb717a8-418f-4347-bea6-0eda398b8d65";
-const TOKEN = "JJ2RsI2RhjO4fWGd7PBXmvCpT26iYNvGK5WHhwvgmfqq+E0lHyAX6tGH6Z0rDlU11pLr4+i0PAdK9W7OOWhb4XxjutKdvtQhLjw2FBP7O0J7/Gf8iWHbCWZXuDSiSymj2j1ekyZcrzAygs9fOmgJnhW2iI/Mba4LwjMQF8pobbjpUBe7utuKj9/fusgctg4vmg+MxdeYuCUSEygMxbVSyvgkX6q3FxyJp62zeVcuDPpZj97NPY53mvPGtdVDHpvLS+PXUMIEgHi/Eo2zaUApNgtbUMJihjqQdOq50u+gTn4JzGpUidfxzJKOmnripm9QRj/xGFfQGl3lVMHbK5jktimI5rTkdSICX/ww4g==";
 ---
-<umami-article-stats data-url={url} data-website={WEBSITE_ID} data-token={TOKEN} class="contents">
+
+<umami-article-stats data-url={url} class="contents">
     <slot />
 </umami-article-stats>
 
 <script>
+    import { animateValue } from '@utils/animation-utils';
+
     class UmamiArticleStats extends HTMLElement {
         connectedCallback() {
             // 获取相关的配置数据
             const url = this.dataset.url;
-            const website = this.dataset.website;
-            const token = this.dataset.token;
             
             // 确保组件不会重复初始化
             if (this.dataset.loaded) return;
@@ -28,48 +26,51 @@ const TOKEN = "JJ2RsI2RhjO4fWGd7PBXmvCpT26iYNvGK5WHhwvgmfqq+E0lHyAX6tGH6Z0rDlU11
             const viewsEls = this.querySelectorAll('.umami-views');
             const visitsEls = this.querySelectorAll('.umami-visits');
             
-            if (!url || !website || !token) return;
-            
-            const endAt = Date.now();
-            const startAt = 0;
-            const apiUrl = `https://cloud.umami.is/analytics/us/api/websites/${website}/metrics/expanded?startAt=${startAt}&endAt=${endAt}&search=${url}&type=path`;
+            if (!url) return;
 
-            // 调用Umami接口
-            fetch(apiUrl, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('网络请求失败');
-                return res.json();
-            })
-            .then(data => {
+            const cacheKey = 'umamiSiteStatsPromise';
+
+            if (!(window as any)[cacheKey]) {
+                // 如果页面首次初始化请求，则发起一次获取请求
+                const globalWorkerUrl = `https://umami.temperaturetw.top/?url=/posts/`;
+
+                (window as any)[cacheKey] = fetch(globalWorkerUrl, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => {
+                    if (!res.ok) throw new Error('网络请求失败');
+                    return res.json();
+                });
+            }
+
+            // 所有文章卡片等待这唯一的 Promise 请求解决，从而提取他自己的 url 数据
+            (window as any)[cacheKey]
+            .then((dataList: any) => {
                 let pageviews = 0;
                 let visits = 0;
 
-                // 兼容数组或对象数据响应 (metrics/expanded 通常返回数组，stats 通常返回对象)
-                if (Array.isArray(data)) {
-                    if (data.length > 0) {
-                        pageviews = data[0].pageviews || data[0].y || 0;
-                        visits = data[0].visits || 0;
+                // 在返回的全体对象字典 / 数组中寻找符合当前卡片 url 的那项
+                if (Array.isArray(dataList)) {
+                    const matchedUrl = dataList.find((item: any) => item.name === url);
+                    if (matchedUrl) {
+                        pageviews = matchedUrl.pageviews || 0;
+                        visits = matchedUrl.visits || 0;
+                    } else {
+                        pageviews = 0;
+                        visits = 0;
                     }
-                } else if (data) {
-                    pageviews = data.pageviews?.value || data.pageviews || 0;
-                    visits = data.visits?.value || data.visits || 0;
                 }
                 
-                // 格式化数字以提高可读性
-                const viewsStr = Number(pageviews).toLocaleString();
-                const visitsStr = Number(visits).toLocaleString();
-                
-                // 更新每篇文章的浏览量和访问次数DOM展示
-                viewsEls.forEach(el => el.textContent = viewsStr);
-                visitsEls.forEach(el => el.textContent = visitsStr);
+                // 仅当找到数据时触发动画
+                if (pageviews > 0 || visits > 0) {
+                    viewsEls.forEach((el) => animateValue(el, pageviews));
+                    visitsEls.forEach((el) => animateValue(el, visits));
+                } else {
+                    viewsEls.forEach(el => el.textContent = '0');
+                    visitsEls.forEach(el => el.textContent = '0');
+                }
             })
-            .catch(err => {
+            .catch((err: any) => {
                 console.error('获取 Umami 统计失败:', err);
                 viewsEls.forEach(el => el.textContent = '-');
                 visitsEls.forEach(el => el.textContent = '-');
