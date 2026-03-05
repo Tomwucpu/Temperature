@@ -74,6 +74,10 @@ const { remarkPluginFrontmatter } = await entry.render();
             <div>
                 {remarkPluginFrontmatter.minutes} {" " + i18n(remarkPluginFrontmatter.minutes === 1 ? I18nKey.minuteCount : I18nKey.minutesCount)}
             </div>
+            <div>|</div>
+            <div>
+                <time-ago data-datetime={updated ? updated.toISOString() : published.toISOString()}></time-ago>
+            </div>
 
             <UmamiArticleStats url={url}>
                 <div class="flex items-center gap-1" title="浏览量">
@@ -120,3 +124,7 @@ const { remarkPluginFrontmatter } = await entry.render();
 
 <style define:vars={{coverWidth}}>
 </style>
+
+<script>
+    import "../utils/time-ago";
+</script>
