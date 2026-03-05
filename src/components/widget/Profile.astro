@@ -74,6 +74,13 @@ const articleCount = allPosts.length;
                 </div>
                 <span id="profile-word-count" data-val={wordCount} class="font-bold text-neutral-700 dark:text-neutral-200">0</span>
             </div>
+            <div class="col-span-2 flex items-center justify-between px-3 py-2 bg-[var(--card-bg)] dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5 transition">
+                <div class="flex items-center gap-1.5 text-neutral-500 dark:text-neutral-400">
+                    <Icon name="material-symbols:schedule-outline-rounded" class="text-xl"></Icon>
+                    <span class="text-sm font-medium">运行</span>
+                </div>
+                <span id="profile-uptime" class="font-bold text-neutral-700 dark:text-neutral-200">...</span>
+            </div>
         </div>
     </div>
 </div>
@@ -100,6 +107,16 @@ const articleCount = allPosts.length;
             const val = parseInt(wordCountEl.getAttribute('data-val') || '0', 10);
             animateValue(wordCountEl, val, (currentVal) => {
                 return currentVal > 10000 ? (currentVal / 10000).toFixed(1) + 'w' : currentVal.toString();
+            });
+        }
+
+        const uptimeEl = document.getElementById('profile-uptime');
+        if (uptimeEl) {
+            // 建站日期（您可以自行在这里修改为真实的日期）
+            const startDate = new Date('2026-03-01');
+            const diffDays = Math.floor((new Date().getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+            animateValue(uptimeEl, diffDays, (currentVal) => {
+                return currentVal.toString() + ' 天';
             });
         }
     };
