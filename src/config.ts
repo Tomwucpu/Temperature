@@ -1,7 +1,9 @@
+import likeMusic from "./assets/music/like.json";
 import type {
 	ExpressiveCodeConfig,
 	GiscusConfig,
 	LicenseConfig,
+	MusicConfig,
 	NavBarConfig,
 	ProfileConfig,
 	SiteConfig,
@@ -115,4 +117,25 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	// Note: Some styles (such as background color) are being overridden, see the astro.config.mjs file.
 	// Please select a dark theme, as this blog theme currently only supports dark background color
 	theme: "github-dark",
+};
+
+export const musicConfig: MusicConfig = {
+	enable: true,
+	autoplay: false,
+	volume: 0.5,
+	// 从like.json中读取音乐列表数据并映射所需字段
+	list: likeMusic.songs.map(
+		(song: {
+			title: string;
+			artist: string;
+			song_id: number;
+			cover_url: string;
+		}) => ({
+			title: song.title,
+			artist: song.artist,
+			// 拼接网易云音乐的外部播放链接
+			url: `https://music.163.com/song/media/outer/url?id=${song.song_id}.mp3`,
+			cover: song.cover_url,
+		}),
+	),
 };

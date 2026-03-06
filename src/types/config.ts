@@ -118,3 +118,17 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export type MusicData = {
+	title: string;
+	artist: string;
+	url: string;
+	cover?: string;
+};
+
+export type MusicConfig = {
+	enable: boolean;
+	autoplay: boolean;
+	volume: number;
+	list: MusicData[];
+};
