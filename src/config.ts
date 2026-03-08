@@ -48,14 +48,9 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Archive,
 		LinkPreset.About,
 		{
-			name: "工具",
-			children: [
-				{
-					name: "活动日历",
-					url: "https://tool.temperaturetw.top",
-					external: true,
-				},
-			],
+			name: "活动日历",
+			url: "https://tool.temperaturetw.top",
+			external: true,
 		},
 		{
 			name: "GitHub",

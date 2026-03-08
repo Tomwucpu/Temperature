@@ -22,6 +22,9 @@ enum I18nKey {
 	postsCount = "postsCount",
 
 	themeColor = "themeColor",
+	glassmorphism = "glassmorphism",
+	bgGradientLeft = "bgGradientLeft",
+	bgGradientRight = "bgGradientRight",
 
 	lightMode = "lightMode",
 	darkMode = "darkMode",

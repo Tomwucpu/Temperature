@@ -230,7 +230,7 @@ async function scrollToCurrent() {
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex items-center justify-between px-2">
+                <div class="flex items-center justify-between px-2 text-black dark:text-white">
                     <!-- Volume Control -->
                     <div class="flex items-center gap-1.5 w-20">
                         <Icon icon={volume === 0 ? "material-symbols:volume-off-rounded" : "material-symbols:volume-up-rounded"} class="text-lg opacity-70" />

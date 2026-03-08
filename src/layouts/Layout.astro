@@ -133,6 +133,21 @@ const bannerOffset =
 			const hue = localStorage.getItem('hue') || configHue;
 			document.documentElement.style.setProperty('--hue', hue);
 
+			// Load the bg hue gradients from local storage
+			const bgHueLight1 = localStorage.getItem('bg-hue-light-1') || hue;
+			document.documentElement.style.setProperty('--bg-hue-light-1', bgHueLight1);
+			const bgHueLight2 = localStorage.getItem('bg-hue-light-2') || hue;
+			document.documentElement.style.setProperty('--bg-hue-light-2', bgHueLight2);
+			const bgHueDark1 = localStorage.getItem('bg-hue-dark-1') || hue;
+			document.documentElement.style.setProperty('--bg-hue-dark-1', bgHueDark1);
+			const bgHueDark2 = localStorage.getItem('bg-hue-dark-2') || hue;
+			document.documentElement.style.setProperty('--bg-hue-dark-2', bgHueDark2);
+
+			// 恢复毛玻璃风格状态
+			if (localStorage.getItem('glassmorphism') === 'true') {
+				document.documentElement.classList.add('glassmorphism');
+			}
+
 			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
 			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
 			offset = offset - offset % 4;
@@ -208,7 +223,7 @@ import {
 	// SizeObserverPlugin,
 	// ClickScrollPlugin
 } from 'overlayscrollbars';
-import {getHue, getStoredTheme, setHue, setTheme} from "../utils/setting-utils";
+import {getHue, getStoredTheme, setHue, setTheme, getGlassmorphism, setGlassmorphism, getBgHueLight1, getBgHueLight2, getBgHueDark1, getBgHueDark2, setBgHueLight1, setBgHueLight2, setBgHueDark1, setBgHueDark2} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
 import {
 	BANNER_HEIGHT,
@@ -289,7 +304,11 @@ function loadTheme() {
 }
 
 function loadHue() {
-	setHue(getHue())
+	setHue(getHue());
+	setBgHueLight1(getBgHueLight1());
+	setBgHueLight2(getBgHueLight2());
+	setBgHueDark1(getBgHueDark1());
+	setBgHueDark2(getBgHueDark2());
 }
 
 function initCustomScrollbar() {
@@ -373,6 +392,7 @@ function init() {
 	// disableAnimation()()		// TODO
 	loadTheme();
 	loadHue();
+	setGlassmorphism(getGlassmorphism());
 	initCustomScrollbar();
 	showBanner();
 }

@@ -150,3 +150,79 @@
     }
   }
 }
+
+/* ==========================================
+   Glassmorphism 毛玻璃风格主题
+   通过 html.glassmorphism class 控制开关
+   ========================================== */
+
+/* 亮色模式背景渐变 */
+html.glassmorphism {
+    --page-bg: transparent !important;
+    background-image: linear-gradient(135deg, oklch(0.95 0.04 var(--bg-hue-light-1, var(--hue))), oklch(0.88 0.06 var(--bg-hue-light-2, var(--hue)))) !important;
+    background-attachment: fixed;
+}
+
+/* 暗色模式背景渐变 */
+html.glassmorphism.dark {
+    background-image: linear-gradient(135deg, oklch(0.22 0.04 var(--bg-hue-dark-1, var(--hue))), oklch(0.16 0.06 var(--bg-hue-dark-2, var(--hue)))) !important;
+    background-attachment: fixed;
+}
+
+/* 毛玻璃面板 - 亮色 */
+html.glassmorphism .card-base,
+html.glassmorphism .float-panel,
+html.glassmorphism #sidebar-sticky > div {
+    background: rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+}
+
+/* 毛玻璃面板 - 暗色 */
+html.glassmorphism.dark .card-base,
+html.glassmorphism.dark .float-panel,
+html.glassmorphism.dark #sidebar-sticky > div {
+    background: rgba(20, 20, 30, 0.4) !important;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: none;
+}
+
+/* 修复特定背景覆盖毛玻璃效果 */
+html.glassmorphism .btn-card,
+html.glassmorphism .bg-\[var\(--card-bg\)\] {
+    background: transparent !important;
+}
+
+/* 按钮半透明交互态 - 亮色 */
+html.glassmorphism .btn-card:hover,
+html.glassmorphism .btn-regular:hover,
+html.glassmorphism .btn-plain:not(.scale-animation):hover,
+html.glassmorphism .expand-animation:hover::before {
+    background: rgba(255, 255, 255, 0.5) !important;
+}
+
+html.glassmorphism .btn-card:active,
+html.glassmorphism .btn-regular:active,
+html.glassmorphism .btn-plain:not(.scale-animation):active,
+html.glassmorphism .expand-animation:active::before {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 按钮半透明交互态 - 暗色 */
+html.glassmorphism.dark .btn-card:hover,
+html.glassmorphism.dark .btn-regular:hover,
+html.glassmorphism.dark .btn-plain:not(.scale-animation):hover,
+html.glassmorphism.dark .expand-animation:hover::before {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+html.glassmorphism.dark .btn-card:active,
+html.glassmorphism.dark .btn-regular:active,
+html.glassmorphism.dark .btn-plain:not(.scale-animation):active,
+html.glassmorphism.dark .expand-animation:active::before {
+    background: rgba(255, 255, 255, 0.1) !important;
+}

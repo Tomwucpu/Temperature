@@ -25,6 +25,9 @@ export const zh_CN: Translation = {
 	[Key.postsCount]: "篇文章",
 
 	[Key.themeColor]: "主题色",
+	[Key.glassmorphism]: "毛玻璃风格",
+	[Key.bgGradientLeft]: "背景渐变左色",
+	[Key.bgGradientRight]: "背景渐变右色",
 
 	[Key.lightMode]: "亮色",
 	[Key.darkMode]: "暗色",

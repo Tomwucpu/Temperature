@@ -27,6 +27,50 @@ export function setHue(hue: number): void {
 	r.style.setProperty("--hue", String(hue));
 }
 
+export function getBgHueLight1(): number {
+	const stored = localStorage.getItem("bg-hue-light-1");
+	return stored ? Number.parseInt(stored, 10) : getHue();
+}
+
+export function setBgHueLight1(hue: number): void {
+	localStorage.setItem("bg-hue-light-1", String(hue));
+	const r = document.querySelector(":root") as HTMLElement;
+	if (r) r.style.setProperty("--bg-hue-light-1", String(hue));
+}
+
+export function getBgHueLight2(): number {
+	const stored = localStorage.getItem("bg-hue-light-2");
+	return stored ? Number.parseInt(stored, 10) : getHue();
+}
+
+export function setBgHueLight2(hue: number): void {
+	localStorage.setItem("bg-hue-light-2", String(hue));
+	const r = document.querySelector(":root") as HTMLElement;
+	if (r) r.style.setProperty("--bg-hue-light-2", String(hue));
+}
+
+export function getBgHueDark1(): number {
+	const stored = localStorage.getItem("bg-hue-dark-1");
+	return stored ? Number.parseInt(stored, 10) : getHue();
+}
+
+export function setBgHueDark1(hue: number): void {
+	localStorage.setItem("bg-hue-dark-1", String(hue));
+	const r = document.querySelector(":root") as HTMLElement;
+	if (r) r.style.setProperty("--bg-hue-dark-1", String(hue));
+}
+
+export function getBgHueDark2(): number {
+	const stored = localStorage.getItem("bg-hue-dark-2");
+	return stored ? Number.parseInt(stored, 10) : getHue();
+}
+
+export function setBgHueDark2(hue: number): void {
+	localStorage.setItem("bg-hue-dark-2", String(hue));
+	const r = document.querySelector(":root") as HTMLElement;
+	if (r) r.style.setProperty("--bg-hue-dark-2", String(hue));
+}
+
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	switch (theme) {
 		case LIGHT_MODE:
@@ -58,4 +102,18 @@ export function setTheme(theme: LIGHT_DARK_MODE): void {
 
 export function getStoredTheme(): LIGHT_DARK_MODE {
 	return (localStorage.getItem("theme") as LIGHT_DARK_MODE) || DEFAULT_THEME;
+}
+
+/* 毛玻璃风格开关 */
+export function getGlassmorphism(): boolean {
+	return localStorage.getItem("glassmorphism") === "true";
+}
+
+export function setGlassmorphism(enabled: boolean): void {
+	localStorage.setItem("glassmorphism", String(enabled));
+	if (enabled) {
+		document.documentElement.classList.add("glassmorphism");
+	} else {
+		document.documentElement.classList.remove("glassmorphism");
+	}
 }
