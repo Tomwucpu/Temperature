@@ -2,16 +2,22 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
-import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
+import {
+	getDefaultHue,
+	getHue,
+	getWallpaperEnabled,
+	getWallpaperOpacity,
+	setHue,
+	setWallpaperEnabled,
+	setWallpaperOpacity,
+} from "@utils/setting-utils";
+import { onMount } from "svelte";
 
 let hue = getHue();
 const defaultHue = getDefaultHue();
 
 let wallpaperEnabled = false;
 let wallpaperOpacity = 0.7;
-
-import { onMount } from "svelte";
-import { getWallpaperEnabled, setWallpaperEnabled, getWallpaperOpacity, setWallpaperOpacity } from "@utils/setting-utils";
 
 let isMounted = false;
 onMount(() => {
@@ -25,7 +31,7 @@ function resetHue() {
 }
 
 function refreshWallpaper() {
-	const event = new CustomEvent('wallpaper-refresh');
+	const event = new CustomEvent("wallpaper-refresh");
 	window.dispatchEvent(event);
 }
 

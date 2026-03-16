@@ -36,6 +36,6 @@ export const th: Translation = {
 	[Key.publishedAt]: "เผยแพร่เมื่อ",
 	[Key.license]: "สัญญาอนุญาต",
 
-	[Key.enableWallpaper]: 'Background Wallpaper',
-	[Key.refreshWallpaper]: 'Refresh Wallpaper',
+	[Key.enableWallpaper]: "Background Wallpaper",
+	[Key.refreshWallpaper]: "Refresh Wallpaper",
 };

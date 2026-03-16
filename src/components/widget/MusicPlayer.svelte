@@ -1,8 +1,8 @@
 <script lang="ts">
-import { musicConfig } from "@/config";
 import Icon from "@iconify/svelte";
 import { onMount, tick } from "svelte";
-import { slide, fly } from "svelte/transition";
+import { fly, slide } from "svelte/transition";
+import { musicConfig } from "@/config";
 
 let { ...props }: any = $props();
 
@@ -16,9 +16,9 @@ let currentIndex = $state(0);
 // 播放模式：0 - 顺序播放，1 - 随机播放，2 - 单曲循环
 let playMode = $state(0);
 const playModes = [
-    { icon: "material-symbols:repeat-rounded", label: "顺序播放" },
-    { icon: "material-symbols:shuffle-rounded", label: "随机播放" },
-    { icon: "material-symbols:repeat-one-rounded", label: "单曲循环" }
+	{ icon: "material-symbols:repeat-rounded", label: "顺序播放" },
+	{ icon: "material-symbols:shuffle-rounded", label: "随机播放" },
+	{ icon: "material-symbols:repeat-one-rounded", label: "单曲循环" },
 ];
 let errorCount = 0; // 用于防止全是无效链接导致无限循环
 let audioElement = $state() as HTMLAudioElement;
@@ -28,132 +28,143 @@ let currentMusic = $derived(musicConfig.list[currentIndex]);
 
 // Initialize
 onMount(() => {
-    if (musicConfig.autoplay && musicConfig.enable && musicConfig.list.length > 0) {
-        // Autoplay may be blocked by browsers until user interaction
-        audioElement.play().catch(e => console.warn("Autoplay blocked:", e));
-    }
+	if (
+		musicConfig.autoplay &&
+		musicConfig.enable &&
+		musicConfig.list.length > 0
+	) {
+		// Autoplay may be blocked by browsers until user interaction
+		audioElement.play().catch((e) => console.warn("Autoplay blocked:", e));
+	}
 });
 
 function togglePanel() {
-    isOpen = !isOpen;
-    if (!isOpen) {
-        isListOpen = false; // 关闭面板时同时收起播放列表
-    }
+	isOpen = !isOpen;
+	if (!isOpen) {
+		isListOpen = false; // 关闭面板时同时收起播放列表
+	}
 }
 
 function togglePlay() {
-    if (isPlaying) {
-        audioElement.pause();
-    } else {
-        audioElement.play();
-    }
+	if (isPlaying) {
+		audioElement.pause();
+	} else {
+		audioElement.play();
+	}
 }
 
 function handlePlay() {
-    isPlaying = true;
-    errorCount = 0; // 成功播放时重置错误计数
+	isPlaying = true;
+	errorCount = 0; // 成功播放时重置错误计数
 }
 
 function handlePause() {
-    isPlaying = false;
+	isPlaying = false;
 }
 
 function togglePlayMode() {
-    playMode = (playMode + 1) % 3;
+	playMode = (playMode + 1) % 3;
 }
 
 function playNext(forcePlay = false, isEndedEvent = false) {
-    if (isEndedEvent && playMode === 2) {
-        // 单曲循环并且是自然结束时，重新播放当前歌曲
-        audioElement.currentTime = 0;
-        audioElement.play().catch(e => console.warn("play err:", e));
-        return;
-    }
+	if (isEndedEvent && playMode === 2) {
+		// 单曲循环并且是自然结束时，重新播放当前歌曲
+		audioElement.currentTime = 0;
+		audioElement.play().catch((e) => console.warn("play err:", e));
+		return;
+	}
 
-    if (playMode === 1) {
-        // 随机播放
-        const nextIndex = Math.floor(Math.random() * musicConfig.list.length);
-        currentIndex = nextIndex !== currentIndex ? nextIndex : (nextIndex + 1) % musicConfig.list.length; // 避免随机到同一首
-    } else {
-        // 顺序播放/单曲循环被主动点击下一首时
-        currentIndex = (currentIndex + 1) % musicConfig.list.length;
-    }
+	if (playMode === 1) {
+		// 随机播放
+		const nextIndex = Math.floor(Math.random() * musicConfig.list.length);
+		currentIndex =
+			nextIndex !== currentIndex
+				? nextIndex
+				: (nextIndex + 1) % musicConfig.list.length; // 避免随机到同一首
+	} else {
+		// 顺序播放/单曲循环被主动点击下一首时
+		currentIndex = (currentIndex + 1) % musicConfig.list.length;
+	}
 
-    setTimeout(() => {
-        if (isPlaying || forcePlay) {
-            audioElement.play().catch(e => console.warn("play err:", e));
-        }
-    }, 0);
+	setTimeout(() => {
+		if (isPlaying || forcePlay) {
+			audioElement.play().catch((e) => console.warn("play err:", e));
+		}
+	}, 0);
 }
 
 function playPrev() {
-    if (playMode === 1) {
-        // 随机播放
-        const nextIndex = Math.floor(Math.random() * musicConfig.list.length);
-        currentIndex = nextIndex !== currentIndex ? nextIndex : (nextIndex + 1) % musicConfig.list.length;
-    } else {
-        currentIndex = (currentIndex - 1 + musicConfig.list.length) % musicConfig.list.length;
-    }
+	if (playMode === 1) {
+		// 随机播放
+		const nextIndex = Math.floor(Math.random() * musicConfig.list.length);
+		currentIndex =
+			nextIndex !== currentIndex
+				? nextIndex
+				: (nextIndex + 1) % musicConfig.list.length;
+	} else {
+		currentIndex =
+			(currentIndex - 1 + musicConfig.list.length) % musicConfig.list.length;
+	}
 
-    setTimeout(() => {
-        if (isPlaying) {
-            audioElement.play().catch(e => console.warn("play err:", e));
-        }
-    }, 0);
+	setTimeout(() => {
+		if (isPlaying) {
+			audioElement.play().catch((e) => console.warn("play err:", e));
+		}
+	}, 0);
 }
 
 function handleEnded() {
-    playNext(true, true);
+	playNext(true, true);
 }
 
 function handleError() {
-    if (errorCount >= musicConfig.list.length) {
-        isPlaying = false;
-        return; // 所有歌曲都无法播放，停止自动跳过
-    }
-    errorCount++;
-    console.warn(`Failed to play: ${currentMusic.title}, skipping to next.`);
-    playNext(isPlaying); // 如果之前是在播放状态报错的就继续播下一首，否则只静默切歌
+	if (errorCount >= musicConfig.list.length) {
+		isPlaying = false;
+		return; // 所有歌曲都无法播放，停止自动跳过
+	}
+	errorCount++;
+	console.warn(`Failed to play: ${currentMusic.title}, skipping to next.`);
+	playNext(isPlaying); // 如果之前是在播放状态报错的就继续播下一首，否则只静默切歌
 }
 
 function setTime(e: Event) {
-    const target = e.target as HTMLInputElement;
-    audioElement.currentTime = parseFloat(target.value);
+	const target = e.target as HTMLInputElement;
+	audioElement.currentTime = Number.parseFloat(target.value);
 }
 
 function setVolume(e: Event) {
-    const target = e.target as HTMLInputElement;
-    volume = parseFloat(target.value);
-    audioElement.volume = volume;
+	const target = e.target as HTMLInputElement;
+	volume = Number.parseFloat(target.value);
+	audioElement.volume = volume;
 }
 
 function playTrack(index: number) {
-    currentIndex = index;
-    // Audio will change src because of reactivity on `currentMusic.url`
-    // Auto play when selecting a track
-    setTimeout(() => {
-        audioElement.play();
-    }, 0);
+	currentIndex = index;
+	// Audio will change src because of reactivity on `currentMusic.url`
+	// Auto play when selecting a track
+	setTimeout(() => {
+		audioElement.play();
+	}, 0);
 }
 
 function formatTime(seconds: number) {
-    if (isNaN(seconds) || seconds < 0) return "0:00";
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+	if (Number.isNaN(seconds) || seconds < 0) return "0:00";
+	const mins = Math.floor(seconds / 60);
+	const secs = Math.floor(seconds % 60);
+	return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
 async function scrollToCurrent() {
-    if (!isListOpen) {
-        isListOpen = true; // 点击定位按钮时如果列表未打开自动打开
-    }
-    await tick(); // 等待 DOM 更新挂载列表元素
-    if (listElement) {
-        const activeItem = listElement.children[currentIndex] as HTMLElement;
-        if (activeItem) {
-            activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-    }
+	if (!isListOpen) {
+		isListOpen = true; // 点击定位按钮时如果列表未打开自动打开
+	}
+	await tick(); // 等待 DOM 更新挂载列表元素
+	if (listElement) {
+		const activeItem = listElement.children[currentIndex] as HTMLElement;
+		if (activeItem) {
+			activeItem.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+	}
 }
 </script>
 

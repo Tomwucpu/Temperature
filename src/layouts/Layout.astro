@@ -4,6 +4,8 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
+import MusicPlayer from "@components/widget/MusicPlayer.svelte";
+import Wallpaper from "@components/widget/Wallpaper.svelte";
 import { profileConfig, siteConfig } from "@/config";
 import {
 	AUTO_MODE,
@@ -18,8 +20,6 @@ import {
 import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
 import { pathsEqual, url } from "../utils/url-utils";
-import MusicPlayer from "@components/widget/MusicPlayer.svelte";
-import Wallpaper from "@components/widget/Wallpaper.svelte";
 import "katex/dist/katex.css";
 
 interface Props {

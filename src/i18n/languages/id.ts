@@ -36,6 +36,6 @@ export const id: Translation = {
 	[Key.publishedAt]: "Diterbitkan pada",
 	[Key.license]: "Lisensi",
 
-	[Key.enableWallpaper]: 'Background Wallpaper',
-	[Key.refreshWallpaper]: 'Refresh Wallpaper',
+	[Key.enableWallpaper]: "Background Wallpaper",
+	[Key.refreshWallpaper]: "Refresh Wallpaper",
 };
