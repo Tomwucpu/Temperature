@@ -54,7 +54,7 @@ function onImageLoad() {
 
 {#if wallpaperEnabled && imageUrl}
 <div 
-    class="fixed inset-0 w-full h-full z-0 pointer-events-none transition-opacity duration-1000 ease-in-out"
+    class="fixed inset-0 w-full h-full -z-10 pointer-events-none transition-opacity duration-1000 ease-in-out"
     class:opacity-100={isVisible}
     class:opacity-0={!isVisible}
 >
