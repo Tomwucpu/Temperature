@@ -35,4 +35,7 @@ export const es: Translation = {
 	[Key.author]: "Autor",
 	[Key.publishedAt]: "Publicado el",
 	[Key.license]: "Licencia",
+
+	[Key.enableWallpaper]: 'Background Wallpaper',
+	[Key.refreshWallpaper]: 'Refresh Wallpaper',
 };

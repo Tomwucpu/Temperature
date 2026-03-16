@@ -19,6 +19,7 @@ import { defaultFavicons } from "../constants/icon";
 import type { Favicon } from "../types/config";
 import { pathsEqual, url } from "../utils/url-utils";
 import MusicPlayer from "@components/widget/MusicPlayer.svelte";
+import Wallpaper from "@components/widget/Wallpaper.svelte";
 import "katex/dist/katex.css";
 
 interface Props {
@@ -161,6 +162,7 @@ const bannerOffset =
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>
 		
 		<!-- Global Music Player -->
+		<Wallpaper client:only="svelte" />
 		<MusicPlayer client:only="svelte" />
 	</body>
 </html>

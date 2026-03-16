@@ -59,3 +59,13 @@ export function setTheme(theme: LIGHT_DARK_MODE): void {
 export function getStoredTheme(): LIGHT_DARK_MODE {
 	return (localStorage.getItem("theme") as LIGHT_DARK_MODE) || DEFAULT_THEME;
 }
+
+export function getWallpaperEnabled(): boolean {
+	return localStorage.getItem("wallpaper") === "true";
+}
+
+export function setWallpaperEnabled(enabled: boolean): void {
+	localStorage.setItem("wallpaper", String(enabled));
+	const event = new CustomEvent("wallpaper-changed", { detail: enabled });
+	window.dispatchEvent(event);
+}

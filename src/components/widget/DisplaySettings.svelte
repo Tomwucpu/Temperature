@@ -7,8 +7,24 @@ import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
 let hue = getHue();
 const defaultHue = getDefaultHue();
 
+let wallpaperEnabled = false;
+
+import { onMount } from "svelte";
+import { getWallpaperEnabled, setWallpaperEnabled } from "@utils/setting-utils";
+
+let isMounted = false;
+onMount(() => {
+	wallpaperEnabled = getWallpaperEnabled();
+	isMounted = true;
+});
+
 function resetHue() {
 	hue = getDefaultHue();
+}
+
+function refreshWallpaper() {
+	const event = new CustomEvent('wallpaper-refresh');
+	window.dispatchEvent(event);
 }
 
 $: if (hue || hue === 0) {
@@ -40,6 +56,34 @@ $: if (hue || hue === 0) {
     <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
         <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
                class="slider" id="colorSlider" step="5" style="width: 100%">
+    </div>
+
+    <!-- Wallpaper Settings -->
+    <div class="flex flex-row gap-2 mt-4 mb-3 items-center justify-between">
+        <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:-left-3 before:top-[0.33rem]"
+        >
+            {i18n(I18nKey.enableWallpaper)}
+            <button aria-label={i18n(I18nKey.refreshWallpaper)} class="btn-regular w-7 h-7 rounded-md active:scale-90 will-change-transform"
+                    class:opacity-0={!wallpaperEnabled} class:pointer-events-none={!wallpaperEnabled} on:click={refreshWallpaper}>
+                <div class="text-[var(--btn-content)]">
+                    <Icon icon="fa6-solid:arrows-rotate" class="text-[0.875rem]"></Icon>
+                </div>
+            </button>
+        </div>
+        <div class="flex gap-1">
+            <button class="transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center
+            font-bold text-sm items-center text-[var(--btn-content)]"
+            on:click={() => {
+                wallpaperEnabled = !wallpaperEnabled;
+                if (typeof window !== "undefined") {
+                    setWallpaperEnabled(wallpaperEnabled);
+                }
+            }}>
+                {wallpaperEnabled ? "ON" : "OFF"}
+            </button>
+        </div>
     </div>
 </div>
 
