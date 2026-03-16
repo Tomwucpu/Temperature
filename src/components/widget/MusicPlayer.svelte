@@ -4,25 +4,25 @@ import { onMount, tick } from "svelte";
 import { fly, slide } from "svelte/transition";
 import { musicConfig } from "@/config";
 
-let isOpen = $state(false);
-let isListOpen = $state(false);
-let isPlaying = $state(false);
-let volume = $state(musicConfig.volume || 0.5);
-let currentTime = $state(0);
-let duration = $state(0);
-let currentIndex = $state(0);
+let isOpen = false;
+let isListOpen = false;
+let isPlaying = false;
+let volume = musicConfig.volume || 0.5;
+let currentTime = 0;
+let duration = 0;
+let currentIndex = 0;
 // 播放模式：0 - 顺序播放，1 - 随机播放，2 - 单曲循环
-let playMode = $state(0);
+let playMode = 0;
 const playModes = [
 	{ icon: "material-symbols:repeat-rounded", label: "顺序播放" },
 	{ icon: "material-symbols:shuffle-rounded", label: "随机播放" },
 	{ icon: "material-symbols:repeat-one-rounded", label: "单曲循环" },
 ];
 let errorCount = 0; // 用于防止全是无效链接导致无限循环
-let audioElement = $state() as HTMLAudioElement;
-let listElement = $state() as HTMLDivElement;
+let audioElement!: HTMLAudioElement;
+let listElement!: HTMLDivElement;
 
-let currentMusic = $derived(musicConfig.list[currentIndex]);
+$: currentMusic = musicConfig.list[currentIndex];
 
 // Initialize
 onMount(() => {
@@ -171,12 +171,12 @@ async function scrollToCurrent() {
 <audio 
     bind:this={audioElement}
     src={currentMusic.url}
-    onplay={handlePlay}
-    onpause={handlePause}
-    onended={handleEnded}
-    onerror={handleError}
-    ontimeupdate={() => currentTime = audioElement.currentTime}
-    ondurationchange={() => duration = audioElement.duration}
+    on:play={handlePlay}
+    on:pause={handlePause}
+    on:ended={handleEnded}
+    on:error={handleError}
+    on:timeupdate={() => currentTime = audioElement.currentTime}
+    on:durationchange={() => duration = audioElement.duration}
     volume={volume}
 ></audio>
 
@@ -186,7 +186,7 @@ async function scrollToCurrent() {
     <!-- Floating toggle button -->
     <button 
         class="relative w-12 h-12 flex items-center justify-center rounded-full bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:bg-[var(--btn-regular-bg-active)] shadow-lg transition-all hover:scale-105 active:scale-95 border-2 border-[var(--primary)] aspect-square overflow-hidden group" 
-        onclick={togglePanel}
+        on:click={togglePanel}
         aria-label="Toggle Music Player"
     >
         {#if currentMusic.cover}
@@ -233,7 +233,7 @@ async function scrollToCurrent() {
                         min="0" 
                         max={duration || 100} 
                         value={currentTime} 
-                        oninput={setTime}
+                        on:input={setTime}
                         class="w-full h-1 bg-black/10 dark:bg-white/10 rounded-full appearance-none outline-none cursor-pointer accent-[var(--primary)]"
                     />
                 </div>
@@ -249,20 +249,20 @@ async function scrollToCurrent() {
                             max="1" 
                             step="0.01" 
                             value={volume} 
-                            oninput={setVolume}
+                            on:input={setVolume}
                             class="w-full h-1 bg-black/10 dark:bg-white/10 rounded-full appearance-none outline-none cursor-pointer accent-[var(--primary)]"
                         />
                     </div>
 
                     <!-- Play Controls -->
                     <div class="flex items-center gap-1">
-                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" onclick={() => playPrev()}>
+                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" on:click={() => playPrev()}>
                             <Icon icon="material-symbols:skip-previous-rounded" class="text-xl" />
                         </button>
-                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-md transition hover:scale-110 active:scale-95" onclick={togglePlay}>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-md transition hover:scale-110 active:scale-95" on:click={togglePlay}>
                             <Icon icon={isPlaying ? "material-symbols:pause-rounded" : "material-symbols:play-arrow-rounded"} class="text-2xl" />
                         </button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" onclick={() => playNext(true)}>
+                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" on:click={() => playNext(true)}>
                             <Icon icon="material-symbols:skip-next-rounded" class="text-xl" />
                         </button>
                     </div>
@@ -274,7 +274,7 @@ async function scrollToCurrent() {
                         <!-- Play Mode Toggle -->
                         <button 
                             class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" 
-                            onclick={togglePlayMode}
+                            on:click={togglePlayMode}
                             title={playModes[playMode].label}
                             aria-label="Toggle Play Mode"
                         >
@@ -284,7 +284,7 @@ async function scrollToCurrent() {
                         <!-- Locate Current -->
                         <button 
                             class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" 
-                            onclick={scrollToCurrent}
+                            on:click={scrollToCurrent}
                             title="定位当前播放"
                             aria-label="Locate Current Track"
                         >
@@ -293,7 +293,7 @@ async function scrollToCurrent() {
 
                         <button 
                             class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition {isListOpen ? 'text-[var(--primary)]' : 'text-black/50 dark:text-white/50 hover:text-[var(--primary)]'}" 
-                            onclick={() => isListOpen = !isListOpen}
+                            on:click={() => isListOpen = !isListOpen}
                             aria-label="Toggle Playlist"
                         >
                             <Icon icon="material-symbols:queue-music-rounded" class="text-xl" />
@@ -310,13 +310,13 @@ async function scrollToCurrent() {
                     <div 
                         bind:this={listElement}
                         class="max-h-[280px] overflow-y-auto pr-1 scrollbar-base overscroll-contain"
-                        onwheel={(e) => e.stopPropagation()}
-                        ontouchmove={(e) => e.stopPropagation()}
+                        on:wheel={(e) => e.stopPropagation()}
+                        on:touchmove={(e) => e.stopPropagation()}
                     >
                         {#each musicConfig.list as track, i}
                             <button 
                                 class="w-full flex items-center gap-2 px-2 py-2 rounded-md text-left transition hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] {i === currentIndex ? 'bg-[var(--btn-plain-bg-active)]' : ''}"
-                                onclick={() => playTrack(i)}
+                                on:click={() => playTrack(i)}
                             >
                                 <div class="w-4 flex-shrink-0 flex items-center justify-center">
                                     {#if i === currentIndex}
