@@ -73,15 +73,23 @@ $: if (hue || hue === 0) {
             </button>
         </div>
         <div class="flex gap-1">
-            <button class="transition bg-[var(--btn-regular-bg)] w-10 h-7 rounded-md flex justify-center
-            font-bold text-sm items-center text-[var(--btn-content)]"
-            on:click={() => {
-                wallpaperEnabled = !wallpaperEnabled;
-                if (typeof window !== "undefined") {
-                    setWallpaperEnabled(wallpaperEnabled);
-                }
-            }}>
-                {wallpaperEnabled ? "ON" : "OFF"}
+            <button aria-label="Toggle Wallpaper"
+                class="w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none relative flex items-center"
+                class:bg-[var(--primary)]={wallpaperEnabled}
+                class:bg-neutral-300={!wallpaperEnabled}
+                class:dark:bg-neutral-600={!wallpaperEnabled}
+                on:click={() => {
+                    wallpaperEnabled = !wallpaperEnabled;
+                    if (typeof window !== "undefined") {
+                        setWallpaperEnabled(wallpaperEnabled);
+                    }
+                }}
+            >
+                <span
+                    class="block bg-white w-4 h-4 rounded-full shadow-sm transition-transform duration-200"
+                    class:translate-x-6={wallpaperEnabled}
+                    class:translate-x-1={!wallpaperEnabled}
+                ></span>
             </button>
         </div>
     </div>

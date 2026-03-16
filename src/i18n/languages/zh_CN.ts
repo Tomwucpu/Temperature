@@ -36,6 +36,6 @@ export const zh_CN: Translation = {
 	[Key.publishedAt]: "发布于",
 	[Key.license]: "许可协议",
 
-	[Key.enableWallpaper]: '背景壁纸',
-	[Key.refreshWallpaper]: '刷新壁纸',
+	[Key.enableWallpaper]: "背景壁纸",
+	[Key.refreshWallpaper]: "刷新壁纸",
 };

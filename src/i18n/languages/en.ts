@@ -36,6 +36,6 @@ export const en: Translation = {
 	[Key.publishedAt]: "Published at",
 	[Key.license]: "License",
 
-	[Key.enableWallpaper]: 'Background Wallpaper',
-	[Key.refreshWallpaper]: 'Refresh Wallpaper',
+	[Key.enableWallpaper]: "Background Wallpaper",
+	[Key.refreshWallpaper]: "Refresh Wallpaper",
 };
