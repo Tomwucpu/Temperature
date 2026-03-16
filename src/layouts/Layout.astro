@@ -4,7 +4,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import ConfigCarrier from "@components/ConfigCarrier.astro";
-import MusicPlayer from "@components/widget/MusicPlayer.svelte";
+import MusicPlayerComponent from "@components/widget/MusicPlayer.svelte";
 import Wallpaper from "@components/widget/Wallpaper.svelte";
 import { profileConfig, siteConfig } from "@/config";
 import {
@@ -31,6 +31,7 @@ interface Props {
 }
 
 let { title, banner, description, lang, setOGTypeArticle } = Astro.props;
+const MusicPlayer = MusicPlayerComponent as any;
 
 // apply a class to the body element to decide the height of the banner, only used for initial page load
 // Swup can update the body for each page visit, but it's after the page transition, causing a delay for banner height change
