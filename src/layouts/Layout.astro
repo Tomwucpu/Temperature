@@ -479,9 +479,22 @@ const trackInitialPageview = () => {
 };
 trackInitialPageview();
 
-let backToTopBtn = document.getElementById('back-to-top-btn');
-let toc = document.getElementById('toc-wrapper');
-let navbar = document.getElementById('navbar-wrapper')
+let backToTopBtn: HTMLElement | null = null;
+let scrollToCommentsBtn: HTMLElement | null = null;
+let commentsSection: HTMLElement | null = null;
+let toc: HTMLElement | null = null;
+let navbar: HTMLElement | null = null;
+
+function refreshFloatingActionTargets() {
+	backToTopBtn = document.getElementById('back-to-top-btn');
+	scrollToCommentsBtn = document.getElementById('scroll-to-comments-btn');
+	commentsSection = document.getElementById('comments-section');
+	toc = document.getElementById('toc-wrapper');
+	navbar = document.getElementById('navbar-wrapper');
+}
+
+refreshFloatingActionTargets();
+
 function scrollFunction() {
 	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
 
@@ -490,6 +503,14 @@ function scrollFunction() {
 			backToTopBtn.classList.remove('hide')
 		} else {
 			backToTopBtn.classList.add('hide')
+		}
+	}
+
+	if (scrollToCommentsBtn) {
+		if (commentsSection) {
+			scrollToCommentsBtn.classList.remove('hide')
+		} else {
+			scrollToCommentsBtn.classList.add('hide')
 		}
 	}
 
@@ -519,12 +540,27 @@ function scrollFunction() {
 	}
 }
 window.onscroll = scrollFunction
+scrollFunction()
+
+const syncFloatingActions = () => {
+	refreshFloatingActionTargets()
+	scrollFunction()
+}
+
+if (window.swup?.hooks) {
+	window.swup.hooks.on('page:view', syncFloatingActions)
+} else {
+	document.addEventListener('swup:enable', () => {
+		window.swup.hooks.on('page:view', syncFloatingActions)
+	}, { once: true })
+}
 
 window.onresize = () => {
 	// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
 	let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
 	offset = offset - offset % 4;
 	document.documentElement.style.setProperty('--banner-height-extend', `${offset}px`);
+	scrollFunction()
 }
 
 </script>
