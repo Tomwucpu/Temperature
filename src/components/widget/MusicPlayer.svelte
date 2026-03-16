@@ -187,7 +187,7 @@ async function scrollToCurrent() {
     
     <!-- Floating toggle button -->
     <button 
-        class="relative w-12 h-12 flex items-center justify-center rounded-full bg-[var(--card-bg)] shadow-lg transition-transform hover:scale-105 active:scale-95 border-2 border-[var(--primary)] aspect-square overflow-hidden" 
+        class="relative w-12 h-12 flex items-center justify-center rounded-full bg-[var(--btn-regular-bg)] hover:bg-[var(--btn-regular-bg-hover)] active:bg-[var(--btn-regular-bg-active)] shadow-lg transition-all hover:scale-105 active:scale-95 border-2 border-[var(--primary)] aspect-square overflow-hidden group" 
         onclick={togglePanel}
         aria-label="Toggle Music Player"
     >
@@ -198,9 +198,9 @@ async function scrollToCurrent() {
                 class="absolute inset-0 w-full h-full object-cover rounded-full opacity-60 {isPlaying ? 'animate-[spin_10s_linear_infinite]' : ''}" 
             />
         {/if}
-        <Icon icon="material-symbols:music-note-rounded" class="text-2xl z-10 text-[var(--primary)] drop-shadow-md" />
+        <Icon icon="material-symbols:music-note-rounded" class="text-2xl z-10 text-[var(--btn-content)] dark:text-white/75 group-hover:text-[var(--primary)] drop-shadow-md transition-colors" />
         {#if isPlaying && !isOpen}
-            <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[var(--card-bg)]"></span>
+            <span class="absolute top-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[var(--btn-regular-bg)]"></span>
         {/if}
     </button>
 
@@ -208,7 +208,7 @@ async function scrollToCurrent() {
     <div class="absolute bottom-16 left-0 w-80 flex flex-col-reverse gap-3 pointer-events-none z-10">
         <!-- Main Player Panel -->
         {#if isOpen}
-            <div transition:fly={{ y: 20, duration: 300 }} class="card-base p-4 shadow-xl flex flex-col gap-4 pointer-events-auto">
+            <div transition:fly={{ y: 20, duration: 300 }} class="rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] p-4 shadow-xl flex flex-col gap-4 pointer-events-auto border border-black/5 dark:border-white/5">
                 <!-- Header (Cover & Info) -->
                 <div class="flex items-center gap-3">
                     <div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-black/10 dark:bg-white/10 flex items-center justify-center">
@@ -220,7 +220,7 @@ async function scrollToCurrent() {
                     </div>
                     <div class="flex-1 min-w-0 overflow-hidden">
                         <div class="text-sm font-bold truncate text-[var(--primary)]">{currentMusic.title}</div>
-                        <div class="text-xs text-black/50 dark:text-white/50 truncate">{currentMusic.artist}</div>
+                        <div class="text-xs text-black/50 dark:text-white/50 truncate font-medium">{currentMusic.artist}</div>
                     </div>
                 </div>
 
@@ -244,7 +244,7 @@ async function scrollToCurrent() {
                 <div class="flex items-center justify-between px-2">
                     <!-- Volume Control -->
                     <div class="flex items-center gap-1.5 w-20">
-                        <Icon icon={volume === 0 ? "material-symbols:volume-off-rounded" : "material-symbols:volume-up-rounded"} class="text-lg opacity-70" />
+                        <Icon icon={volume === 0 ? "material-symbols:volume-off-rounded" : "material-symbols:volume-up-rounded"} class="text-lg text-black/50 dark:text-white/50" />
                         <input 
                             type="range" 
                             min="0" 
@@ -258,13 +258,13 @@ async function scrollToCurrent() {
 
                     <!-- Play Controls -->
                     <div class="flex items-center gap-1">
-                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition" onclick={() => playPrev()}>
+                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" onclick={() => playPrev()}>
                             <Icon icon="material-symbols:skip-previous-rounded" class="text-xl" />
                         </button>
-                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-md transition hover:scale-105 active:scale-95" onclick={togglePlay}>
+                        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--primary)] text-white shadow-md transition hover:scale-110 active:scale-95" onclick={togglePlay}>
                             <Icon icon={isPlaying ? "material-symbols:pause-rounded" : "material-symbols:play-arrow-rounded"} class="text-2xl" />
                         </button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition" onclick={() => playNext(true)}>
+                        <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" onclick={() => playNext(true)}>
                             <Icon icon="material-symbols:skip-next-rounded" class="text-xl" />
                         </button>
                     </div>
@@ -275,7 +275,7 @@ async function scrollToCurrent() {
                     <div class="flex items-center justify-end gap-1">
                         <!-- Play Mode Toggle -->
                         <button 
-                            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition opacity-70 hover:opacity-100" 
+                            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" 
                             onclick={togglePlayMode}
                             title={playModes[playMode].label}
                             aria-label="Toggle Play Mode"
@@ -285,7 +285,7 @@ async function scrollToCurrent() {
 
                         <!-- Locate Current -->
                         <button 
-                            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition opacity-70 hover:opacity-100" 
+                            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition text-black/50 dark:text-white/50 hover:text-[var(--primary)]" 
                             onclick={scrollToCurrent}
                             title="定位当前播放"
                             aria-label="Locate Current Track"
@@ -294,7 +294,7 @@ async function scrollToCurrent() {
                         </button>
 
                         <button 
-                            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition {isListOpen ? 'text-[var(--primary)]' : 'opacity-70'}" 
+                            class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] transition {isListOpen ? 'text-[var(--primary)]' : 'text-black/50 dark:text-white/50 hover:text-[var(--primary)]'}" 
                             onclick={() => isListOpen = !isListOpen}
                             aria-label="Toggle Playlist"
                         >
@@ -308,7 +308,7 @@ async function scrollToCurrent() {
         <!-- Playlist Independent Panel -->
         {#if isOpen && isListOpen}
             <div transition:slide={{ duration: 300, axis: 'y' }} class="pointer-events-auto">
-                <div class="card-base shadow-xl p-2">
+                <div class="rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] shadow-xl p-2 border border-black/5 dark:border-white/5">
                     <div 
                         bind:this={listElement}
                         class="max-h-[280px] overflow-y-auto pr-1 scrollbar-base overscroll-contain"
@@ -317,7 +317,7 @@ async function scrollToCurrent() {
                     >
                         {#each musicConfig.list as track, i}
                             <button 
-                                class="w-full flex items-center gap-2 px-2 py-2 rounded-md text-left transition hover:bg-black/5 dark:hover:bg-white/5 {i === currentIndex ? 'bg-black/5 dark:bg-white/5' : ''}"
+                                class="w-full flex items-center gap-2 px-2 py-2 rounded-md text-left transition hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)] {i === currentIndex ? 'bg-[var(--btn-plain-bg-active)]' : ''}"
                                 onclick={() => playTrack(i)}
                             >
                                 <div class="w-4 flex-shrink-0 flex items-center justify-center">
