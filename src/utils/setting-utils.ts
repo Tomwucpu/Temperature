@@ -69,3 +69,16 @@ export function setWallpaperEnabled(enabled: boolean): void {
 	const event = new CustomEvent("wallpaper-changed", { detail: enabled });
 	window.dispatchEvent(event);
 }
+
+export function getWallpaperOpacity(): number {
+	const stored = localStorage.getItem("wallpaperOpacity");
+	return stored ? Number.parseFloat(stored) : 0.7;
+}
+
+export function setWallpaperOpacity(opacity: number): void {
+	localStorage.setItem("wallpaperOpacity", String(opacity));
+	const event = new CustomEvent("wallpaper-opacity-changed", {
+		detail: opacity,
+	});
+	window.dispatchEvent(event);
+}

@@ -8,13 +8,15 @@ let hue = getHue();
 const defaultHue = getDefaultHue();
 
 let wallpaperEnabled = false;
+let wallpaperOpacity = 0.7;
 
 import { onMount } from "svelte";
-import { getWallpaperEnabled, setWallpaperEnabled } from "@utils/setting-utils";
+import { getWallpaperEnabled, setWallpaperEnabled, getWallpaperOpacity, setWallpaperOpacity } from "@utils/setting-utils";
 
 let isMounted = false;
 onMount(() => {
 	wallpaperEnabled = getWallpaperEnabled();
+	wallpaperOpacity = getWallpaperOpacity();
 	isMounted = true;
 });
 
@@ -25,6 +27,11 @@ function resetHue() {
 function refreshWallpaper() {
 	const event = new CustomEvent('wallpaper-refresh');
 	window.dispatchEvent(event);
+}
+
+function resetWallpaperOpacity() {
+	wallpaperOpacity = 0.7;
+	setWallpaperOpacity(0.7);
 }
 
 $: if (hue || hue === 0) {
@@ -93,6 +100,35 @@ $: if (hue || hue === 0) {
             </button>
         </div>
     </div>
+
+    <!-- Wallpaper Opacity Settings -->
+    {#if wallpaperEnabled}
+    <div class="flex flex-row gap-2 mt-4 mb-3 items-center justify-between">
+        <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:-left-3 before:top-[0.33rem]"
+        >
+            {i18n(I18nKey.wallpaperOpacity)}
+            <button aria-label="Reset to Default" class="btn-regular w-7 h-7 rounded-md active:scale-90 will-change-transform"
+                    class:opacity-0={wallpaperOpacity === 0.7} class:pointer-events-none={wallpaperOpacity === 0.7} on:click={resetWallpaperOpacity}>
+                <div class="text-[var(--btn-content)]">
+                    <Icon icon="fa6-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
+                </div>
+            </button>
+        </div>
+        <div class="flex gap-1">
+            <div class="transition bg-[var(--btn-regular-bg)] w-12 h-7 rounded-md flex justify-center
+            font-bold text-sm items-center text-[var(--btn-content)]">
+                {Math.round(wallpaperOpacity * 100)}%
+            </div>
+        </div>
+    </div>
+    <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none mb-2">
+        <input aria-label={i18n(I18nKey.wallpaperOpacity)} type="range" min="0" max="1" step="0.05" bind:value={wallpaperOpacity}
+               on:input={() => setWallpaperOpacity(wallpaperOpacity)}
+               class="slider opacity-slider" style="width: 100%">
+    </div>
+    {/if}
 </div>
 
 

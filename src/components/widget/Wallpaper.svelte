@@ -1,10 +1,11 @@
 <script lang="ts">
 import { onMount, onDestroy } from "svelte";
-import { getWallpaperEnabled } from "@utils/setting-utils";
+import { getWallpaperEnabled, getWallpaperOpacity } from "@utils/setting-utils";
 
 let wallpaperEnabled = false;
 let imageUrl = "";
 let isVisible = false;
+let wallpaperOpacity = 0.7;
 
 function loadNewWallpaper() {
     // Adding timestamp to avoid caching
@@ -29,8 +30,13 @@ function handleWallpaperRefresh() {
     }
 }
 
+function handleWallpaperOpacityChange(e: CustomEvent<number>) {
+    wallpaperOpacity = e.detail;
+}
+
 onMount(() => {
     wallpaperEnabled = getWallpaperEnabled();
+    wallpaperOpacity = getWallpaperOpacity();
     // onMount is only called on full page load (or refresh), not on Swup navigation
     if (wallpaperEnabled) {
         loadNewWallpaper();
@@ -38,12 +44,14 @@ onMount(() => {
 
     window.addEventListener("wallpaper-changed", handleWallpaperChange as EventListener);
     window.addEventListener("wallpaper-refresh", handleWallpaperRefresh as EventListener);
+    window.addEventListener("wallpaper-opacity-changed", handleWallpaperOpacityChange as EventListener);
 });
 
 onDestroy(() => {
     if (typeof window !== "undefined") {
         window.removeEventListener("wallpaper-changed", handleWallpaperChange as EventListener);
         window.removeEventListener("wallpaper-refresh", handleWallpaperRefresh as EventListener);
+        window.removeEventListener("wallpaper-opacity-changed", handleWallpaperOpacityChange as EventListener);
     }
 });
 
@@ -65,6 +73,6 @@ function onImageLoad() {
         on:load={onImageLoad}
     />
     <!-- Add an overlay to adapt to light/dark themes -->
-    <div class="absolute inset-0 bg-white/70 dark:bg-black/70 transition-colors duration-500"></div>
+    <div class="absolute inset-0 bg-white dark:bg-black transition-all duration-500" style="opacity: {wallpaperOpacity}"></div>
 </div>
 {/if}

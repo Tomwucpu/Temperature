@@ -35,6 +35,7 @@ enum I18nKey {
 
 	enableWallpaper = "enableWallpaper",
 	refreshWallpaper = "refreshWallpaper",
+	wallpaperOpacity = "wallpaperOpacity",
 }
 
 export default I18nKey;
