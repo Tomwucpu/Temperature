@@ -4,8 +4,6 @@ import { onMount, tick } from "svelte";
 import { fly, slide } from "svelte/transition";
 import { musicConfig } from "@/config";
 
-let { ...props }: any = $props();
-
 let isOpen = $state(false);
 let isListOpen = $state(false);
 let isPlaying = $state(false);
