@@ -92,5 +92,8 @@ export function getBackgroundOpacity(): number {
 
 export function setBackgroundOpacity(opacity: number): void {
 	localStorage.setItem("backgroundOpacity", String(opacity));
-	document.documentElement.style.setProperty("--surface-opacity", String(opacity));
+	document.documentElement.style.setProperty(
+		"--surface-opacity",
+		String(opacity),
+	);
 }

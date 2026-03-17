@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(pnpm build)",
-      "Bash(pnpm check)"
+      "Bash(pnpm check)",
+      "Bash(curl:*)",
+      "Bash(git ls-remote:*)"
     ]
   }
 }
