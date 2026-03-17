@@ -134,6 +134,10 @@ const bannerOffset =
 			const hue = localStorage.getItem('hue') || configHue;
 			document.documentElement.style.setProperty('--hue', hue);
 
+			// Load the component background opacity from local storage
+			const backgroundOpacity = localStorage.getItem('backgroundOpacity') || '0.6';
+			document.documentElement.style.setProperty('--surface-opacity', backgroundOpacity);
+
 			// calculate the --banner-height-extend, which needs to be a multiple of 4 to avoid blurry text
 			let offset = Math.floor(window.innerHeight * (BANNER_HEIGHT_EXTEND / 100));
 			offset = offset - offset % 4;
@@ -210,7 +214,7 @@ import {
 	// SizeObserverPlugin,
 	// ClickScrollPlugin
 } from 'overlayscrollbars';
-import {getHue, getStoredTheme, setHue, setTheme} from "../utils/setting-utils";
+import {getBackgroundOpacity, getHue, getStoredTheme, setBackgroundOpacity, setHue, setTheme} from "../utils/setting-utils";
 import {pathsEqual, url} from "../utils/url-utils";
 import {
 	BANNER_HEIGHT,
@@ -294,6 +298,10 @@ function loadHue() {
 	setHue(getHue())
 }
 
+function loadBackgroundOpacity() {
+	setBackgroundOpacity(getBackgroundOpacity())
+}
+
 function initCustomScrollbar() {
 	const bodyElement = document.querySelector('body');
 	if (!bodyElement) return;
@@ -375,6 +383,7 @@ function init() {
 	// disableAnimation()()		// TODO
 	loadTheme();
 	loadHue();
+	loadBackgroundOpacity();
 	initCustomScrollbar();
 	showBanner();
 }

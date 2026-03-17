@@ -36,6 +36,7 @@ enum I18nKey {
 	enableWallpaper = "enableWallpaper",
 	refreshWallpaper = "refreshWallpaper",
 	wallpaperOpacity = "wallpaperOpacity",
+	componentBackgroundOpacity = "componentBackgroundOpacity",
 }
 
 export default I18nKey;

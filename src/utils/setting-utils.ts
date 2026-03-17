@@ -7,6 +7,8 @@ import {
 import { expressiveCodeConfig } from "@/config";
 import type { LIGHT_DARK_MODE } from "@/types/config";
 
+export const DEFAULT_BACKGROUND_OPACITY = 0.6;
+
 export function getDefaultHue(): number {
 	const fallback = "250";
 	const configCarrier = document.getElementById("config-carrier");
@@ -81,4 +83,14 @@ export function setWallpaperOpacity(opacity: number): void {
 		detail: opacity,
 	});
 	window.dispatchEvent(event);
+}
+
+export function getBackgroundOpacity(): number {
+	const stored = localStorage.getItem("backgroundOpacity");
+	return stored ? Number.parseFloat(stored) : DEFAULT_BACKGROUND_OPACITY;
+}
+
+export function setBackgroundOpacity(opacity: number): void {
+	localStorage.setItem("backgroundOpacity", String(opacity));
+	document.documentElement.style.setProperty("--surface-opacity", String(opacity));
 }

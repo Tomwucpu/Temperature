@@ -11,6 +11,15 @@ rainbow-dark = linear-gradient(to right, oklch(0.70 0.10 0), oklch(0.70 0.10 30)
 :root
   --radius-large 1rem
   --content-delay 150ms
+  --surface-opacity 0.6
+  --card-bg-light unquote('rgba(255, 255, 255, var(--surface-opacity))')
+  --card-bg-dark unquote('rgba(30, 30, 40, var(--surface-opacity))')
+  --float-panel-bg-light unquote('rgba(255, 255, 255, var(--surface-opacity))')
+  --float-panel-bg-dark unquote('rgba(25, 25, 35, var(--surface-opacity))')
+  --btn-card-bg-light unquote('rgba(255, 255, 255, var(--surface-opacity))')
+  --btn-card-bg-hover-light unquote('rgba(255, 255, 255, var(--surface-opacity))')
+  --btn-card-bg-dark unquote('rgba(30, 30, 40, var(--surface-opacity))')
+  --btn-card-bg-hover-dark unquote('rgba(40, 40, 55, var(--surface-opacity))')
 
 /* An util to define variables that vary with light and dark mode */
 define(vars)
@@ -25,7 +34,7 @@ define(vars)
 define({
   --primary: oklch(0.70 0.14 var(--hue)) oklch(0.75 0.14 var(--hue))
   --page-bg: oklch(0.95 0.01 var(--hue)) oklch(0.16 0.014 var(--hue))
-  --card-bg: white oklch(0.23 0.015 var(--hue))
+  --card-bg: var(--card-bg-light) var(--card-bg-dark)
 
   --btn-content: oklch(0.55 0.12 var(--hue)) oklch(0.75 0.1 var(--hue))
 
@@ -36,7 +45,8 @@ define({
   --btn-plain-bg-hover: oklch(0.95 0.025 var(--hue)) oklch(0.30 0.035 var(--hue))
   --btn-plain-bg-active: oklch(0.98 0.01 var(--hue)) oklch(0.27 0.025 var(--hue))
 
-  --btn-card-bg-hover: oklch(0.98 0.005 var(--hue)) oklch(0.3 0.03 var(--hue))
+  --btn-card-bg: var(--btn-card-bg-light) var(--btn-card-bg-dark)
+  --btn-card-bg-hover: var(--btn-card-bg-hover-light) var(--btn-card-bg-hover-dark)
   --btn-card-bg-active: oklch(0.9 0.03 var(--hue)) oklch(0.35 0.035 var(--hue))
 
   --enter-btn-bg: var(--btn-regular-bg)
@@ -65,7 +75,7 @@ define({
   --link-hover: oklch(0.95 0.025 var(--hue)) oklch(0.40 0.08 var(--hue))
   --link-active: oklch(0.90 0.05 var(--hue)) oklch(0.35 0.07 var(--hue))
 
-  --float-panel-bg: white oklch(0.19 0.015 var(--hue))
+  --float-panel-bg: var(--float-panel-bg-light) var(--float-panel-bg-dark)
 
   --scrollbar-bg-light: black(0.4)
   --scrollbar-bg-hover-light: black(0.5)

@@ -39,4 +39,5 @@ export const en: Translation = {
 	[Key.enableWallpaper]: "Background Wallpaper",
 	[Key.refreshWallpaper]: "Refresh Wallpaper",
 	[Key.wallpaperOpacity]: "Wallpaper Opacity",
+	[Key.componentBackgroundOpacity]: "Component Background Opacity",
 };

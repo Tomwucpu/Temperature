@@ -1,14 +1,24 @@
 @tailwind components;
 
 @layer components {
+    /* 磨砂玻璃卡片基础样式 */
     .card-base {
-        @apply rounded-[var(--radius-large)] overflow-hidden bg-[var(--card-bg)] transition;
+        @apply rounded-[var(--radius-large)] overflow-hidden transition;
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    :root.dark .card-base {
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
     h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, blockquote, code, pre, table, th, td, strong {
         @apply transition;
     }
+    /* 磨砂玻璃阴影效果 */
     .card-shadow {
-        @apply drop-shadow-[0_2px_4px_rgba(0,0,0,0.005)]
+        @apply drop-shadow-[0_2px_8px_rgba(0,0,0,0.08)];
+    }
+    :root.dark .card-shadow {
+        @apply drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)];
     }
     .expand-animation {
         @apply relative before:ease-out before:transition active:bg-none hover:before:bg-[var(--btn-plain-bg-hover)] active:before:bg-[var(--btn-plain-bg-active)] z-0
@@ -20,8 +30,14 @@
     .link-lg {
         @apply transition rounded-md p-1.5 -m-1.5 expand-animation;
     }
+    /* 磨砂玻璃浮层面板 */
     .float-panel {
-        @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden bg-[var(--float-panel-bg)] transition shadow-xl dark:shadow-none
+        @apply top-[5.25rem] rounded-[var(--radius-large)] overflow-hidden transition shadow-xl dark:shadow-none;
+        background: var(--float-panel-bg);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+    :root.dark .float-panel {
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .float-panel-closed {
         @apply -translate-y-1 opacity-0 pointer-events-none
@@ -30,9 +46,20 @@
         @apply bg-transparent text-[var(--primary)]
     }
 
+    /* 磨砂玻璃卡片按钮 */
     .btn-card {
-        @apply transition flex items-center justify-center bg-[var(--card-bg)] hover:bg-[var(--btn-card-bg-hover)]
-        active:bg-[var(--btn-card-bg-active)]
+        @apply transition flex items-center justify-center
+        active:bg-[var(--btn-card-bg-active)];
+        background: var(--btn-card-bg);
+    }
+    .btn-card:hover {
+        background: var(--btn-card-bg-hover);
+    }
+    :root.dark .btn-card {
+        background: var(--btn-card-bg);
+    }
+    :root.dark .btn-card:hover {
+        background: var(--btn-card-bg-hover);
     }
     .btn-card.disabled {
         @apply pointer-events-none text-black/10 dark:text-white/10

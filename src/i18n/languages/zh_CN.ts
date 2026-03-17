@@ -39,4 +39,5 @@ export const zh_CN: Translation = {
 	[Key.enableWallpaper]: "背景壁纸",
 	[Key.refreshWallpaper]: "刷新壁纸",
 	[Key.wallpaperOpacity]: "壁纸遮罩透明度",
+	[Key.componentBackgroundOpacity]: "组件背景透明度",
 };
