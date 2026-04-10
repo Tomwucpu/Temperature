@@ -90,15 +90,15 @@ Umami 是一款开源、隐私优先的网站统计分析工具，常被视为 G
 
 ### 如何得到website-id
 
-![image-20260410150740042](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410150740042.png)
+![image-20260410150740042](./assets//Umami网站、文章浏览量统计/image-20260410150740042.png)
 
-![image-20260410150827363](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410150827363.png)
+![image-20260410150827363](./assets/Umami网站、文章浏览量统计/image-20260410150827363.png)
 
 ### 如何获取api-key
 
-![image-20260410140846958](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410140846958.png)
+![image-20260410140846958](./assets/Umami网站、文章浏览量统计/image-20260410140846958.png)
 
-![image-20260410141045249](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410141045249.png)
+![image-20260410141045249](./assets/Umami网站、文章浏览量统计/image-20260410141045249.png)
 
 获取响应数据需要的内容（以下为样例）：
 
@@ -106,13 +106,13 @@ Umami 是一款开源、隐私优先的网站统计分析工具，常被视为 G
 - **x-umami-api-key**：`api_uXwf8Sgrpv2ZKr20Hnx6hb02Yl2e1sur`
 - **website-id**：`8cb717a8-418f-4347-bea6-0eda398b8d65`
 
-![image-20260410145744547](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145744547.png)
+![image-20260410145744547](./assets/Umami网站、文章浏览量统计/image-20260410145744547.png)
 
-![image-20260410145828224](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145828224.png)
+![image-20260410145828224](./assets/Umami网站、文章浏览量统计/image-20260410145828224.png)
 
 响应内容：
 
-![image-20260410145916375](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145916375.png)
+![image-20260410145916375](./assets/Umami网站、文章浏览量统计/image-20260410145916375.png)
 
 | Field       | Description                |
 | ----------- | -------------------------- |
@@ -283,13 +283,13 @@ fetch(apiUrl, {
 - **x-umami-api-key**：`api_uXwf8Sgrpv2ZKr20Hnx6hb02Yl2e1sur`
 - **website-id**：`8cb717a8-418f-4347-bea6-0eda398b8d65`
 
-![image-20260410144951658](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410144951658.png)
+![image-20260410144951658](./assets/Umami网站、文章浏览量统计/image-20260410144951658.png)
 
-![image-20260410145047455](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145047455.png)
+![image-20260410145047455](./assets/Umami网站、文章浏览量统计/image-20260410145047455.png)
 
 响应内容：
 
-![image-20260410145110905](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145110905.png)
+![image-20260410145110905](./assets/Umami网站、文章浏览量统计/image-20260410145110905.png)
 
 | Field       | Description                |
 | ----------- | -------------------------- |
