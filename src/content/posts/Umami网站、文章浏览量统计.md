@@ -1,6 +1,7 @@
 ---
 title: Umami网站、文章浏览量统计
 published: 2026-03-05
+updated: 2026-04-10
 description: '手把手教会你如何应用Umami统计你的网站'
 image: ''
 tags: ["Umami","教程","api"]
@@ -58,7 +59,7 @@ Umami 是一款开源、隐私优先的网站统计分析工具，常被视为 G
 ~~~html
 <head>
     <title>我的网站</title>
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="94059cb0-4616-47ff-8625-3d3cc4c893df"></script>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="8cb717a8-418f-4347-bea6-0eda398b8d65"></script>
 </head>
 ~~~
 
@@ -72,45 +73,58 @@ Umami 是一款开源、隐私优先的网站统计分析工具，常被视为 G
 
 ## 2、调用api查看网站浏览量
 
-### 简单粗暴的方法直接看右键检测网站
+通用样例：
 
-得到访问的url，同时也得到了website-id
+- **url**：`https://api.umami.is/v1/websites/{your-website-id}/stats?startAt={startAt}&endAt={endAt}`
 
-![image-20260305165900413](./assets//Umami网站、文章浏览量统计/image-20260305165900413.png)
+请求头携带：
 
-得到访问需要用到的authorization
+- **x-umami-api-key**: `{your-api-key}`
 
-![image-20260305171157440](./assets//Umami网站、文章浏览量统计/image-20260305171157440.png)
+下列需要修改为你自己的数据
 
-对应的响应数据：
+- `{your-website-id}`
+- `{startAt}`：可修改数字（!!!毫秒级时间戳）
+- `{endAt}`：可修改数字（!!!毫秒级时间戳）
+- `{your-api-key}`
 
-![image-20260305170133859](./assets//Umami网站、文章浏览量统计/image-20260305170133859.png)
+### 如何得到website-id
 
-得到website-id
+![image-20260410150740042](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410150740042.png)
 
-![image-20260305181737482](./assets//Umami网站、文章浏览量统计/image-20260305181737482.png)
+![image-20260410150827363](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410150827363.png)
+
+### 如何获取api-key
+
+![image-20260410140846958](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410140846958.png)
+
+![image-20260410141045249](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410141045249.png)
 
 获取响应数据需要的内容（以下为样例）：
 
-- **url**：`https://cloud.umami.is/analytics/us/api/websites/94059cb0-4616-47ff-8625-3d3cc4c893df/stats?startAt=1772611200000&endAt=1772701199999`
-- **Authorization**:`Bearer Au58VsH1UhnGGIk/HFhGM76X2YVu0mSFo0EQ2RZJ3KwHMWGcf+bNhGuMZ12+6X2YVuPmaIocQdsSjA5e1Jxr8/hRx5KrZgPfnYH6m19vnAhP3VkRIq86ehysg6X2YVuvFAQXadt7PODcC28x52ZiMN+YOg35acg6tvUrpx+4CMSm7GDx+7luZ24X2rgbDoYC56X2YVuHiBX0uggrFWpET9vE1Qmjrye1zkRPjlXd00vsOzONO7tVlr4scZDIlcGKvv9A+umScR4QE+LjUlVPQoSjtIlNdloC74Ay2AjVowyqa8G2e6LaZwrZbnRqQdeuqJay6XuvK1oIasFx9htc2Xl276X2YVuGVIWcZQ==`
-- **website-id**：`94059cb0-4616-47ff-8625-3d3cc4c893df`
+- **url**：`https://api.umami.is/v1/websites/8cb717a8-418f-4347-bea6-0eda398b8d65/stats?startAt=0&endAt=1799999999999`
+- **x-umami-api-key**：`api_uXwf8Sgrpv2ZKr20Hnx6hb02Yl2e1sur`
+- **website-id**：`8cb717a8-418f-4347-bea6-0eda398b8d65`
 
-通用样例：
+![image-20260410145744547](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145744547.png)
 
-- **url**：`https://cloud.umami.is/analytics/us/api/websites/{your-website-id}/stats?startAt={startAt}&endAt={endAt}`
-- **Authorization**: `Bearer {your-token}`
+![image-20260410145828224](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145828224.png)
 
-部分内容需要修改为你们自己的内容（下列为需要修改的内容）：
+响应内容：
 
-- `{your-website-id}`
-- `{startAt}`：可修改数字
-- `{endAt}`：可修改数字
-- `{your-token}`
+![image-20260410145916375](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145916375.png)
+
+| Field       | Description                |
+| ----------- | -------------------------- |
+| `pageviews` | 页面访问量。               |
+| `visitors`  | 独立访客数量。             |
+| `visits`    | 独立访问次数。             |
+| `bounces`   | 仅访问单个页面的访客数量。 |
+| `totaltime` | 网站上的停留时间。         |
 
 ### 自己写的组件代码
 
-``` astro title="Umami.astro" "your-website-id" "your-token"
+``` astro title="Umami.astro" "your-website-id" "your-api-key"
 ---
 import WidgetLayout from './WidgetLayout.astro';
 import { Icon } from 'astro-icon/components';
@@ -123,9 +137,9 @@ interface Props {
 const { class: className, style } = Astro.props;
 
 const UMAMI_CONFIG = {
-    baseUrl: 'https://cloud.umami.is/analytics/us/api',
+    baseUrl: 'https://api.umami.is/v1',
     websiteId: 'your-website-id',
-    shareToken: 'your-token'
+    apiKey: 'your-api-key'
 };
 
 const endAt = Date.now();
@@ -166,8 +180,8 @@ const apiUrl = `${UMAMI_CONFIG.baseUrl}/websites/${UMAMI_CONFIG.websiteId}/stats
     fetch(apiUrl, {
         method: 'GET',
         headers: {
-            Authorization: `Bearer UMAMI_CONFIG.shareToken`,
-            'Content-Type': 'application/json'
+            Accept: "application/json",
+          	"x-umami-api-key": UMAMI_CONFIG.apiKey,
         }
     })
     .then(res => {
@@ -210,17 +224,17 @@ const apiUrl = `${UMAMI_CONFIG.baseUrl}/websites/${UMAMI_CONFIG.websiteId}/stats
 
 ### 关键代码
 
-~~~ js "{your-website-id}" "{your-token}"
+~~~ js "{your-website-id}" "{your-api-key}"
 const startAt = 0;
 const endAt = Date.now();
 
-const apiUrl = https://cloud.umami.is/analytics/us/api/websites/{your-website-id}/stats?startAt=${startAt}&endAt=${endAt};
+const apiUrl = 'https://api.umami.is/v1/websites/{your-website-id}/stats?startAt=${startAt}&endAt=${endAt}';
 
 fetch(apiUrl, {
     method: 'GET',
     headers: {
-        Authorization: `Bearer {your-token}`,
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "x-umami-api-key": {your-api-key},
     }
 })
 ~~~
@@ -229,27 +243,27 @@ fetch(apiUrl, {
 
 `{your-website-id}`
 
-`{your-token}`
+`{your-api-key}`
 
-startAt和endAt根据自己需求修改（这个是修改获取起止时间）
+`{startAt}`和`{endAt}`根据自己需求修改（这个是修改获取起止时间）（!!!毫秒级时间戳）
 
 ## 3、调用api查看文章浏览量
 
-跟上述方法相同，这里直接给出
+更上述内容差不多，只用修改apiUrl ，在添加一个页面路径
 
 ### 关键代码
 
-``` js "{your-website-id}" "{your-want-to-search-url}" "{your-token}"
+``` js "{your-website-id}" "{your-want-to-search-url}" "{your-api-key}"
 const startAt = 0;
 const endAt = Date.now();
 
-const apiUrl = `https://cloud.umami.is/analytics/us/api/websites/{your-website-id}/metrics/expanded?startAt=${startAt}&endAt=${endAt}&search={encodeURIComponent({your-want-to-search-url})}&type=path`;
+const apiUrl = 'https://api.umami.is/v1/websites/{your-website-id}/metrics/expanded?startAt=${startAt}&endAt=${endAt}&search=${encodeURIComponent({your-want-to-search-url})}&type=path';
 
 fetch(apiUrl, {
     method: 'GET',
     headers: {
-        Authorization: `Bearer {your-token}`,
-        'Content-Type': 'application/json'
+        Accept: "application/json",
+        "x-umami-api-key": {your-api-key},
     }
 })
 ```
@@ -258,20 +272,32 @@ fetch(apiUrl, {
 
 `{your-website-id}`
 
-`{your-token}`
+`{your-api-key}`
 
 `{your-want-to-search-url}`
 
-简单来说就是修改一下`apiUrl`
-
 样例：
 
-**apiUrl**：`https://cloud.umami.is/analytics/us/api/websites/94059cb0-4616-47ff-8625-3d3cc4c893df/metrics/expanded?startAt=1772622000000&endAt=1772711999999&search=&type=path`
+- **url**：`https://api.umami.is/v1/websites/94059cb0-4616-47ff-8625-3d3cc4c893df/metrics/expanded?startAt=0&endAt=1799999999999&search=&type=path`
+
+- **x-umami-api-key**：`api_uXwf8Sgrpv2ZKr20Hnx6hb02Yl2e1sur`
+- **website-id**：`8cb717a8-418f-4347-bea6-0eda398b8d65`
+
+![image-20260410144951658](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410144951658.png)
+
+![image-20260410145047455](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145047455.png)
 
 响应内容：
 
+![image-20260410145110905](E:\project\blog\Temperature\src\content\posts\assets\Umami网站、文章浏览量统计\image-20260410145110905.png)
 
-![image-20260305194522678](./assets//Umami网站、文章浏览量统计/image-20260305194522678.png)
-
+| Field       | Description                |
+| ----------- | -------------------------- |
+| `name`      | 唯一值，取决于指标类型。   |
+| `pageviews` | 页面访问量。               |
+| `visitors`  | 独立访客数量。             |
+| `visits`    | 独立访问次数。             |
+| `bounces`   | 仅访问单个页面的访客数量。 |
+| `totaltime` | 网站上的停留时间。         |
 
 想要调用其他接口可以查看 [官方api接口文档](https://umami.is/docs/api/website-stats) | [网站统计 - Umami 中文文档](https://umami.zhcndoc.com/docs/api/website-stats)
