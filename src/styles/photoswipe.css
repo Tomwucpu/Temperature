@@ -1,12 +1,23 @@
 .pswp__button {
     @apply transition bg-black/40 hover:bg-black/50 active:bg-black/60 flex items-center justify-center mr-0 w-12 h-12 !important;
 }
-.pswp__button--zoom, .pswp__button--close {
+.pswp__button--zoom, .pswp__button--zoom-out, .pswp__button--reset-zoom, .pswp__button--close {
     @apply mt-4 rounded-xl active:scale-90 !important;
 }
-.pswp__button--zoom {
+.pswp__button--zoom,
+.pswp__button--zoom-out,
+.pswp__button--reset-zoom {
     @apply mr-2.5 !important;
 }
 .pswp__button--close {
     @apply mr-4 !important;
+}
+.pswp__button[disabled] {
+    @apply opacity-40 cursor-not-allowed hover:bg-black/40 active:scale-100 !important;
+}
+.pswp--reduced-preview .pswp__img {
+    cursor: grab !important;
+}
+.pswp--reduced-preview .pswp__img:active {
+    cursor: grabbing !important;
 }
