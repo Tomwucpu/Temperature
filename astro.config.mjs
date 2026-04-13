@@ -19,6 +19,10 @@ import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig } from "./src/config.ts";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
+import {
+	contentAssetsIntegration,
+	remarkLocalHtmlImages,
+} from "./src/plugins/remark-local-html-images.mjs";
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { rehypeOpenMarkdownLinksInNewTab } from "./src/plugins/rehype-open-markdown-links-in-new-tab.mjs";
@@ -105,6 +109,7 @@ export default defineConfig({
 		}),
 		svelte(),
 		sitemap(),
+		contentAssetsIntegration(),
 	],
 
 	markdown: {
@@ -115,6 +120,7 @@ export default defineConfig({
 			remarkGithubAdmonitionsToDirectives,
 			remarkDirective,
 			remarkSectionize,
+			remarkLocalHtmlImages,
 			parseDirectiveNode,
 		],
 		rehypePlugins: [
