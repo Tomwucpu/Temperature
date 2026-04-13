@@ -109,6 +109,8 @@ export default defineConfig({
 		}),
 		svelte(),
 		sitemap(),
+		// 为 Markdown 中的原生 HTML 本地图片提供统一的静态访问路径：
+		// dev 时直接从 src/content 读取，build 后复制到 dist/content-assets。
 		contentAssetsIntegration(),
 	],
 
@@ -120,6 +122,8 @@ export default defineConfig({
 			remarkGithubAdmonitionsToDirectives,
 			remarkDirective,
 			remarkSectionize,
+			// 原生 HTML <img> 在这一阶段还是 mdast 的 html 节点，
+			// 需要在进入 rehype 前先把相对 src 改写为可访问的 /content-assets/* 路径。
 			remarkLocalHtmlImages,
 			parseDirectiveNode,
 		],
