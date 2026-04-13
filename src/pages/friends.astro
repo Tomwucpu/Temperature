@@ -1,0 +1,86 @@
+---
+import { getEntry, render } from "astro:content";
+import FriendLinkCard from "@components/FriendLinkCard.astro";
+import Markdown from "@components/misc/Markdown.astro";
+import { Icon } from "astro-icon/components";
+import { friends } from "@/data/friends";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+const friendsPost = await getEntry("spec", "friends");
+const friendsApplyPost = await getEntry("spec", "friends-apply");
+
+if (!friendsPost) {
+	throw new Error("Friends page content not found");
+}
+
+if (!friendsApplyPost) {
+	throw new Error("Friends apply content not found");
+}
+
+const { Content } = await render(friendsPost);
+const { Content: ApplyContent } = await render(friendsApplyPost);
+---
+
+<MainGridLayout title={i18n(I18nKey.friends)} description={i18n(I18nKey.friends)}>
+	<div class="flex flex-col gap-4">
+		<section class="flex w-full overflow-hidden rounded-[var(--radius-large)] relative min-h-32">
+			<div class="card-base z-10 relative w-full px-9 py-6">
+				<Markdown class="mt-2">
+					<Content />
+				</Markdown>
+			</div>
+		</section>
+
+		<section
+			data-friends-list-card="true"
+			class="card-base flex flex-col gap-3 px-6 py-5 md:px-8 md:py-6"
+		>
+			<div
+				data-friends-list-header="true"
+				class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 border-b border-dashed border-black/10 pb-3 dark:border-white/15 sm:items-end"
+			>
+				<div data-friends-list-title="true" class="min-w-0">
+					<div class="text-sm font-medium uppercase tracking-[0.2em] text-50">
+						Friends
+					</div>
+					<h2 class="mt-1 text-2xl font-bold text-90">友链列表</h2>
+				</div>
+				<div
+					data-friends-count="true"
+					class="rounded-xl border border-[var(--primary)] bg-[var(--card-bg)] px-3 py-1.5 text-sm font-medium text-[var(--primary)]"
+				>
+					{friends.length} 个站点
+				</div>
+			</div>
+
+			{friends.length > 0 ? (
+				<div class="grid grid-cols-1 gap-3 xl:grid-cols-2">
+					{friends.map((friend) => <FriendLinkCard friend={friend} />)}
+				</div>
+			) : (
+				<div class="rounded-[var(--radius-large)] bg-[var(--btn-regular-bg)] px-8 py-8 text-center">
+					<div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--card-bg)] text-[var(--primary)]">
+						<Icon
+							name="material-symbols:handshake-outline-rounded"
+							class="text-3xl"
+						/>
+					</div>
+					<h3 class="mb-2 text-2xl font-bold text-90">友链建设中</h3>
+					<p class="mx-auto max-w-2xl leading-7 text-75">
+						当前还没有收录友链。交换说明和联系方式在下方，如果你希望交换链接，可以继续往下看。
+					</p>
+				</div>
+			)}
+		</section>
+
+		<section class="flex w-full overflow-hidden rounded-[var(--radius-large)] relative min-h-32">
+			<div data-friends-apply-card="true" class="card-base z-10 relative w-full px-9 py-6">
+				<Markdown class="mt-1">
+					<ApplyContent />
+				</Markdown>
+			</div>
+		</section>
+	</div>
+</MainGridLayout>

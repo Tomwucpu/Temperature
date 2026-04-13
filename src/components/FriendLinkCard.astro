@@ -1,0 +1,85 @@
+---
+import { Icon } from "astro-icon/components";
+import type { FriendLink } from "@/data/friends";
+import ImageWrapper from "./misc/ImageWrapper.astro";
+
+interface Props {
+	friend: FriendLink;
+}
+
+const { friend } = Astro.props;
+
+const avatarText =
+	Array.from(friend.name.trim()).slice(0, 2).join("") || "友链";
+
+let hostname = friend.url;
+try {
+	hostname = new URL(friend.url).hostname.replace(/^www\./, "");
+} catch {
+	hostname = friend.url;
+}
+---
+
+<article
+	class="flex h-full flex-col rounded-[var(--radius-large)] border bg-[var(--card-bg)] p-4 md:p-5"
+	style="border-color: color-mix(in oklab, var(--primary) 28%, transparent);"
+>
+	<div class="mb-3 flex items-start gap-3">
+		<div class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[var(--btn-regular-bg)]">
+			{friend.avatar ? (
+				<ImageWrapper
+					src={friend.avatar}
+					alt={`${friend.name} avatar`}
+					class="h-full w-full"
+				/>
+			) : (
+				<div class="flex h-full w-full items-center justify-center text-sm font-bold text-[var(--primary)]">
+					{avatarText}
+				</div>
+			)}
+		</div>
+		<div class="min-w-0 flex-1">
+			<h2 class="mb-1 break-words text-lg font-bold text-90">{friend.name}</h2>
+			<a
+				href={friend.url}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-sm text-50 transition hover:text-[var(--primary)] break-all"
+			>
+				{hostname}
+			</a>
+		</div>
+	</div>
+
+	<p
+		class="mb-3 text-sm leading-6 text-75"
+		style="-webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 3; overflow: hidden;"
+	>
+		{friend.description}
+	</p>
+
+	{friend.tags && friend.tags.length > 0 && (
+		<div class="mb-3 flex flex-wrap gap-2">
+			{friend.tags.map((tag) => (
+				<span
+					class="rounded-lg px-3 py-1 text-xs font-medium text-[var(--primary)]"
+					style="background-color: color-mix(in oklab, var(--primary) 16%, transparent);"
+				>
+					{tag}
+				</span>
+			))}
+		</div>
+	)}
+
+	<div class="mt-auto border-t border-dashed border-black/10 pt-3 dark:border-white/15">
+		<a
+			href={friend.url}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="btn-regular inline-flex h-9 gap-2 rounded-xl px-3.5 font-bold active:scale-95"
+		>
+			<span>立即访问</span>
+			<Icon name="fa6-solid:arrow-up-right-from-square" class="text-sm" />
+		</a>
+	</div>
+</article>

@@ -20,17 +20,35 @@
     }
 
     a:not(.no-styling) {
-        @apply relative bg-none link font-medium text-[var(--primary)]
+        @apply relative z-0 rounded-md p-1 -m-1 font-medium text-[var(--primary)] transition
         underline decoration-[var(--link-underline)] decoration-1 decoration-dashed underline-offset-4;
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
         display: inline-block;
-    
+
+        &:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            transform: scale(0.85);
+            transition: all 0.2s ease-out;
+            z-index: -1;
+        }
+
         &:hover, &:active {
             @apply decoration-transparent;
-            background: var(--btn-plain-bg-hover);
             border-bottom: 1px dashed var(--link-hover);
             text-decoration: none;
+        }
+
+        &:hover:before {
+            background: var(--btn-plain-bg-hover);
+            transform: scale(1);
+        }
+
+        &:active:before {
+            background: var(--btn-plain-bg-active);
         }
     }
 
@@ -61,7 +79,9 @@
 
     .copy-btn {
         all: initial;
-        @apply btn-regular-dark opacity-0 shadow-lg shadow-black/50 absolute active:scale-90 h-8 w-8 top-3 right-3 text-sm rounded-lg transition-all ease-in-out z-20 cursor-pointer;
+        @apply flex items-center justify-center opacity-0 shadow-lg shadow-black/50 absolute active:scale-90 h-8 w-8 top-3 right-3 text-sm rounded-lg transition-all ease-in-out z-20 cursor-pointer
+        bg-[oklch(0.45_0.01_var(--hue))] hover:bg-[oklch(0.50_0.01_var(--hue))] active:bg-[oklch(0.55_0.01_var(--hue))]
+        dark:bg-[oklch(0.30_0.02_var(--hue))] dark:hover:bg-[oklch(0.35_0.03_var(--hue))] dark:active:bg-[oklch(0.40_0.03_var(--hue))];
     }
     .frame:hover .copy-btn {
         opacity: 1;
