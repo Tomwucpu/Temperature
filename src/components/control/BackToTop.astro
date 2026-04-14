@@ -4,8 +4,8 @@ import { Icon } from "astro-icon/components";
 
 <!-- There can't be a filter on parent element, or it will break `fixed` -->
 <div class="back-to-top-wrapper hidden lg:block">
-    <div id="back-to-top-btn" class="floating-action-btn back-to-top-btn hide flex items-center rounded-2xl overflow-hidden transition" onclick="backToTop()">
-        <button aria-label="Back to Top" class="btn-card h-[3.75rem] w-[3.75rem]">
+    <div id="back-to-top-btn" class="floating-action-btn back-to-top-btn hide flex items-center justify-center rounded-2xl overflow-hidden transition" onclick="backToTop()">
+        <button aria-label="Back to Top" class="btn-card progress-ring-btn">
             <Icon name="material-symbols:keyboard-arrow-up-rounded" class="mx-auto"></Icon>
         </button>
     </div>
@@ -51,6 +51,15 @@ import { Icon } from "astro-icon/components";
 
 .back-to-top-btn
     bottom: 10rem
+    padding: 2px
+    --scroll-progress-angle: 0deg
+    --scroll-progress-track: unquote('color-mix(in oklab, var(--primary) 18%, transparent)')
+    background: unquote('conic-gradient(from -45deg, var(--primary) 0deg var(--scroll-progress-angle), var(--scroll-progress-track) var(--scroll-progress-angle) 360deg)')
+
+.progress-ring-btn
+    width: calc(3.75rem - 4px)
+    height: calc(3.75rem - 4px)
+    border-radius: 0.875rem
 
 .comments-btn
     bottom: 5.25rem

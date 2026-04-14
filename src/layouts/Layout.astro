@@ -215,6 +215,7 @@ import {
 	// ClickScrollPlugin
 } from 'overlayscrollbars';
 import {getBackgroundOpacity, getHue, getStoredTheme, setBackgroundOpacity, setHue, setTheme} from "../utils/setting-utils";
+import { getScrollProgressAngle } from "../utils/scroll-progress.js";
 import {pathsEqual, url} from "../utils/url-utils";
 import {
 	BANNER_HEIGHT,
@@ -506,8 +507,16 @@ refreshFloatingActionTargets();
 
 function scrollFunction() {
 	let bannerHeight = window.innerHeight * (BANNER_HEIGHT / 100)
+	const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop
+	const scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
+	const clientHeight = document.documentElement.clientHeight
 
 	if (backToTopBtn) {
+		backToTopBtn.style.setProperty('--scroll-progress-angle', getScrollProgressAngle({
+			scrollTop,
+			scrollHeight,
+			clientHeight,
+		}))
 		if (document.body.scrollTop > bannerHeight || document.documentElement.scrollTop > bannerHeight) {
 			backToTopBtn.classList.remove('hide')
 		} else {
